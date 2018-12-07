@@ -8,9 +8,12 @@ clock = pygame.time.Clock()
 
 while done:
     for e in pygame.event.get():
-        if e.tpype == pygame.QUIT():
+        if e.type == pygame.QUIT:
+            done = False
+    if e.type == pygame.KEYDOWN:
+        if e.key == pygame.ESCAPE:
             done = False
 
-    win.blit(screen(0, 0))
+    win.blit(screen, (0, 0))
     
     clock.tick(40)
