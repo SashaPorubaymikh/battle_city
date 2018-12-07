@@ -5,7 +5,7 @@ from Characters import Player
 win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen = pygame.Surface((screen_width, screen_height))
 
-player = Player(0, 0, 'Images/Player_image.PNG')
+player = Player(0, 0, 'Images/Tanks/Player_image.PNG')
 
 done = True
 clock = pygame.time.Clock()
