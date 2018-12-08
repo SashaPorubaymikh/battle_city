@@ -14,7 +14,7 @@ x = y = 0
 for row in level1:
     for col in row:
         if col == '0':
-            b1 = Block(x, y, 'Images/Blocks/Brick.png')
+            b1 = Block(x, y, 'images/blocks/brick.png')
             sprite_group.add(b1)
             bricks_group.append(b1)
         x += 40
