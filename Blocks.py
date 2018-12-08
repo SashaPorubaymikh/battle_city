@@ -7,6 +7,7 @@ class Blocks(Sprite):
         self.x = x
         self.y = y
         self.image = load(image)
+        self.rect = self.image.get_rect()
 
     def draw(self, surf):
         surf.blit(self.image, (self.x, self.y))

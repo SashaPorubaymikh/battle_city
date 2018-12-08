@@ -1,8 +1,26 @@
 import pygame
 from DisplayScale import screen_width, screen_height
+from Levels import level1
+from Blocks import Blocks
 
 win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen = pygame.Surface((screen_width, screen_height))
+
+bricks_group = []
+sprite_group = pygame.sprite.Group()
+
+x = y = 0
+
+for row in level1:
+    for col in row:
+        if col == '0':
+            b1 = Blocks(x, y, 'images/blocks/brick.png')
+            sprite_group.add(b1)
+            bricks_group.append(b1)
+        x += 40
+    y += 40
+    x = 0
+
 
 done = True
 clock = pygame.time.Clock()
@@ -14,8 +32,14 @@ while done:
     if e.type == pygame.KEYDOWN:
         if e.key == pygame.ESCAPE:
             done = False
+
+    
+    #sprite_group.draw(screen)
             
-    screen.fill((255, 255, 255))
+    screen.fill((150, 150, 150))
+    
+    for i in sprite_group:
+        screen.blit(i.image, (i.x, i.y))
 
     win.blit(screen, (0, 0))
 
