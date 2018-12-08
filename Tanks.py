@@ -6,12 +6,15 @@ from Blocks import Blocks
 win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen = pygame.Surface((screen_width, screen_height))
 
+levels = []
+levels.append(level1)
+level_num = 0
 bricks_group = []
 sprite_group = pygame.sprite.Group()
 
 x = y = 0
 
-for row in level1:
+for row in levels[level_num]:
     for col in row:
         if col == '0':
             b1 = Blocks(x, y, 'images/blocks/brick.png')
@@ -36,8 +39,8 @@ while done:
     
     #sprite_group.draw(screen)
             
-    screen.fill((150, 150, 150))
-    
+    screen.fill((5, 5, 5))
+
     for i in sprite_group:
         screen.blit(i.image, (i.x, i.y))
 
