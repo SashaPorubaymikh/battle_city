@@ -39,7 +39,7 @@ while done:
     
     #sprite_group.draw(screen)
             
-    screen.fill((5, 5, 5))
+    screen.fill((15, 15, 15))
 
     for i in sprite_group:
         screen.blit(i.image, (i.x, i.y))
