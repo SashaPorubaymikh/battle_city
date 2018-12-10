@@ -38,18 +38,18 @@ while done:
         if e.type == pygame.QUIT:
             done = False
         if e.type == pygame.KEYDOWN:
-            # if e.key == pygame.ESCAPE:
-            #     done = False
+            if e.key == pygame.K_ESCAPE:
+                done = False
             if e.key == pygame.K_LEFT:
                 left = lleft = True
                 lright = ldown = lup = up = down = right = False
-            if e.key == pygame.K_RIGHT:
+            elif e.key == pygame.K_RIGHT:
                 right = lright = True
                 lleft = left = lup = up = ldown = down = False
-            if e.key == pygame.K_UP:
+            elif e.key == pygame.K_UP:
                 up = lup = True
                 lleft = left = lright = right = ldown = down = False
-            if e.key == pygame.K_DOWN:
+            elif e.key == pygame.K_DOWN:
                 down = ldown = True
                 lup = up = right = lright = left = lleft = False
         if e.type == pygame.KEYUP:
