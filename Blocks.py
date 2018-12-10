@@ -4,11 +4,9 @@ from pygame.image import load
 class Blocks(Sprite):
     def __init__(self, x, y, image):
         Sprite.__init__(self)
-        self.x = x
-        self.y = y
         self.image = load(image)
         self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
-    def draw(self, surf):
-        surf.blit(self.image, (self.x, self.y))
     
