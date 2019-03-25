@@ -33,7 +33,10 @@ class Player(Sprite):
         self.xvel = self.yvel = 0
         self.rect.x = x
         self.rect.y = y
+        self.ready = True
+        self.timer = 0
 
+        #Создание анимации
         def make_boltAnimation(anim_list, delay):
             boltAnim = []
             for anim in anim_list:
@@ -64,6 +67,11 @@ class Player(Sprite):
         self.boltAnimDown.play()
 
     def update(self, left, right, up, down, lleft, lright, lup, ldown, blocks):
+        if not(self.ready):
+            self.timer += 1
+        if self.timer == 10:
+            self.timer = 0
+            self.ready = True
         if left:
             self.xvel = -MOVE_SPEED
             self.boltAnimLeft.blit(self.image, (0, 0))
