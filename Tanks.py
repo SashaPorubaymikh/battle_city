@@ -41,10 +41,7 @@ def make_level(level_num, xx, yy):
         x = 0
     player.rect.x = xx
     player.rect.y = yy
-    print('ok')
-    print(bricks_group)
 make_level(0, 100, 100)
-print(bricks_group)
 
 #Конфигурации главного цикла
 done = True
@@ -127,7 +124,7 @@ while done:
             
     screen.fill((5, 5, 5))
 
-    player.update(left, right, up, down, lleft, lright, lup, ldown, bricks_group)
+    player.update(left, right, up, down, lleft, lright, lup, ldown, bricks_group, screen)
 
     #отрисовка объектов
     for i in bricks_group:

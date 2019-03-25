@@ -1,6 +1,7 @@
 from pygame.sprite import Sprite, collide_rect
 from pygame import image
 from pygame import Surface
+from pygame.transform import scale
 import pyganim
 
 MOVE_SPEED = 1
@@ -35,6 +36,8 @@ class Player(Sprite):
         self.rect.y = y
         self.ready = True
         self.timer = 0
+        self.recharge = Surface((0, 5))
+        self.recharge.fill((250, 0, 0))
 
         #Создание анимации
         def make_boltAnimation(anim_list, delay):
@@ -66,12 +69,17 @@ class Player(Sprite):
         self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIM_DELAY)
         self.boltAnimDown.play()
 
-    def update(self, left, right, up, down, lleft, lright, lup, ldown, blocks):
+    def update(self, left, right, up, down, lleft, lright, lup, ldown, blocks, screen):
         if not(self.ready):
             self.timer += 1
+            self.recharge = Surface((self.timer * 4, 5))
+            self.recharge.fill((self.timer * 25, 250 - self.timer * self.timer, 0))
         if self.timer == 10:
             self.timer = 0
             self.ready = True
+            self.recharge = Surface((40, 5))
+            self.recharge.fill((0, 250, 0))
+        screen.blit(self.recharge, (self.rect.x, self.rect.y - 10))
         if left:
             self.xvel = -MOVE_SPEED
             self.boltAnimLeft.blit(self.image, (0, 0))
