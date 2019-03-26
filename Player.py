@@ -4,8 +4,6 @@ from pygame import Surface
 from pygame.transform import scale
 import pyganim
 
-MOVE_SPEED = 1
-
 ANIM_DELAY = 0.1
 ANIMATION_STAY_UP = [('images/tanks/player_up_1.png', ANIM_DELAY)]
 ANIMATION_STAY_DOWN = [('images/tanks/player_down_1.png', ANIM_DELAY)]
@@ -34,10 +32,11 @@ class Player(Sprite):
         self.xvel = self.yvel = 0
         self.rect.x = x
         self.rect.y = y
-        self.ready = True
+        self.ready = False
         self.timer = 0
         self.recharge = Surface((0, 5))
         self.recharge.fill((250, 0, 0))
+        self.MOVE_SPEED = 1
 
         #Создание анимации
         def make_boltAnimation(anim_list, delay):
@@ -79,18 +78,18 @@ class Player(Sprite):
             self.ready = True
             self.recharge = Surface((40, 5))
             self.recharge.fill((0, 250, 0))
-        screen.blit(self.recharge, (self.rect.x, self.rect.y - 10))
+        #screen.blit(self.recharge, (self.rect.x, self.rect.y - 10))
         if left:
-            self.xvel = -MOVE_SPEED
+            self.xvel = -self.MOVE_SPEED
             self.boltAnimLeft.blit(self.image, (0, 0))
         if right:
-            self.xvel = MOVE_SPEED
+            self.xvel = self.MOVE_SPEED
             self.boltAnimRight.blit(self.image, (0, 0))
         if up:
-            self.yvel = -MOVE_SPEED
+            self.yvel = -self.MOVE_SPEED
             self.boltAnimUp.blit(self.image, (0, 0))
         if down:
-            self.yvel = MOVE_SPEED
+            self.yvel = self.MOVE_SPEED
             self.boltAnimDown.blit(self.image, (0, 0))
         if lleft and not(left):
             self.yvel = 0

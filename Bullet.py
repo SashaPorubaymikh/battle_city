@@ -12,26 +12,20 @@ class Bullet(Sprite):
         self.dir = direction
         self.speed = 10
 
-    def update(self, direction, screen, blocks, bullets_group, scr_w, scr_h):
+    def update(self, direction, screen, blocks, bullets_group, lvl_w, lvl_h):
         if self.dir == 'up':
             self.rect.y -= self.speed
-            screen.blit(self.image, (self.rect.x, self.rect.y))
         if self.dir == 'down':
             self.rect.y += self.speed
-            screen.blit(self.image, (self.rect.x, self.rect.y))
         if self.dir == 'left':
             self.rect.x -= self.speed
-            screen.blit(rotate(self.image, 90), (self.rect.x, self.rect.y))
         if self.dir == 'right':
             self.rect.x += self.speed
-            screen.blit(rotate(self.image, 90), (self.rect.x, self.rect.y))
         self.collide(blocks, bullets_group)
-        if self.rect.x < 0 or self.rect.y < 0 or self.rect.x > scr_w or self.rect.y > scr_h:
+        if self.rect.x < 0 or self.rect.y < 0 or self.rect.x > lvl_w or self.rect.y > lvl_h:
             bullets_group.remove(self)
 
     def collide(self, blocks, bullets_group):
-        print('ok')
-        print(self)
         for b in blocks:
             if collide_rect(self, b):
                 b.lifes -= 1
