@@ -3,7 +3,9 @@ from Levels import level1, level2
 from Blocks import Blocks
 from Player import Player
 from Bullet import Bullet
+from Controls import Controls
 pygame.init()
+pygame.font.init()
 
 #Создание игрового окна
 infos = pygame.display.Info()
@@ -72,10 +74,23 @@ def camera_func(camera, target_rect):
     t = min(0, t)
  
     return pygame.Rect(l, t, w, h)
-
 camera = Camera(camera_func, lvl_w, lvl_h)
 
+#Отображениe управления
+controls_list = ['Escape - exit',
+                 'W, arrow up - move up',
+                 'D, arrow right - move right',
+                 'S, arrow down - move down',
+                 'A, arrow left - move left',
+                 'F - turn on/turn off fullscreen mode',
+                 'Space, mouse click - shoot',
+                 'C - show/hide controls list']
+
+control = Controls(scr_w, scr_h, controls_list)
+control.show()
+
 #Конфигурации главного цикла
+show_controls = False
 done = True
 clock = pygame.time.Clock()
 pygame.key.set_repeat(10, 10)
@@ -123,6 +138,11 @@ while done:
                 if right or lright:
                     bull = Bullet(player.rect.x + 40, player.rect.y + 18, 'images/bullets/pbullet_ver.png', 'right')
                     bullets_group.append(bull)
+            if e.key == pygame.K_c:
+                if show_controls == False:
+                    show_controls = True
+                else:
+                    show_controls = False
             if e.key == pygame.K_1:
                 make_level(0, 680, 640)
             if e.key == pygame.K_2:
@@ -175,6 +195,8 @@ while done:
     screen.blit(player.recharge, (camera.apply(player)[0], camera.apply(player)[1] - 10))
 
     win.blit(screen, (0, 0))
+    if show_controls == True:
+        win.blit(control.surface, (0, 0))
 
     pygame.display.flip()
     
