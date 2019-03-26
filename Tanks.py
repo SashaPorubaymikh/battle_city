@@ -3,7 +3,9 @@ from Levels import level1, level2
 from Blocks import Blocks
 from Player import Player
 from Bullet import Bullet
+from Controls import Controls
 pygame.init()
+pygame.font.init()
 
 #Создание игрового окна
 infos = pygame.display.Info()
@@ -27,23 +29,68 @@ bricks_group = []
 levels.append(level1)
 levels.append(level2)
 level_num = 0
+lvl_w = lvl_h = 0
 def make_level(level_num, xx, yy):
     x = y = 0
-    global bricks_group
+    global bricks_group, lvl_w, lvl_h
     bricks_group = []
+    lvl_h = len(levels[level_num]) * 40
     for row in levels[level_num]:
+        lvl_w = len(row) * 40
         for col in row:
             if col == '0':
                 b1 = Blocks(x, y, 'images/blocks/brick.png', 1)
+                bricks_group.append(b1)
+            if col == '1':
+                b1 = Blocks(x, y, 'images/blocks/experimentalbrick.png', 10)
                 bricks_group.append(b1)
             x += 40
         y += 40
         x = 0
     player.rect.x = xx
     player.rect.y = yy
-make_level(0, 100, 100)
+make_level(0, 680, 640)
+
+#Создание камеры
+class Camera(object):
+    def __init__(self, camera_func, widht, height):
+        self.camera_func = camera_func
+        self.state = pygame.Rect(0, 0, widht, height )
+  
+    def apply(self, target):
+        return target.rect.move(self.state.topleft)
+  
+    def update(self, target):
+        self.state = self.camera_func(self.state, target.rect)
+  
+def camera_func(camera, target_rect):
+    l = -target_rect.x + scr_w/2
+    t = -target_rect.y + scr_h/2
+    w, h = camera.width, camera.height
+ 
+    l = min(0, l)
+    l = max(-(camera.width-scr_w), l)
+    t = max(-(camera.height-scr_h), t)
+    t = min(0, t)
+ 
+    return pygame.Rect(l, t, w, h)
+camera = Camera(camera_func, lvl_w, lvl_h)
+
+#Отображениe управления
+controls_list = ['Escape - exit',
+                 'W, arrow up - move up',
+                 'D, arrow right - move right',
+                 'S, arrow down - move down',
+                 'A, arrow left - move left',
+                 'F - turn on/turn off fullscreen mode',
+                 'Space, mouse click - shoot',
+                 'C - show/hide controls list']
+
+control = Controls(scr_w, scr_h, controls_list)
+control.show()
 
 #Конфигурации главного цикла
+show_controls = False
 done = True
 clock = pygame.time.Clock()
 pygame.key.set_repeat(10, 10)
@@ -91,8 +138,13 @@ while done:
                 if right or lright:
                     bull = Bullet(player.rect.x + 40, player.rect.y + 18, 'images/bullets/pbullet_ver.png', 'right')
                     bullets_group.append(bull)
+            if e.key == pygame.K_c:
+                if show_controls == False:
+                    show_controls = True
+                else:
+                    show_controls = False
             if e.key == pygame.K_1:
-                make_level(0, 100, 100)
+                make_level(0, 680, 640)
             if e.key == pygame.K_2:
                 make_level(1, 40, 40)
 
@@ -125,17 +177,26 @@ while done:
     screen.fill((5, 5, 5))
 
     player.update(left, right, up, down, lleft, lright, lup, ldown, bricks_group, screen)
+    camera.update(player)
+    for i in bullets_group:
+        i.update(i.dir, screen, bricks_group, bullets_group, lvl_w, lvl_h)
 
     #отрисовка объектов
     for i in bricks_group:
         i.update(bricks_group)
     for i in bricks_group:
-        screen.blit(i.image, (i.rect.x, i.rect.y))
+        screen.blit(i.image, camera.apply(i))
     for i in bullets_group:
-        i.update(i.dir, screen, bricks_group, bullets_group, scr_w, scr_h)
-    screen.blit(player.image, (player.rect.x, player.rect.y))
+        if i.dir == 'up' or i.dir == 'down':
+            screen.blit(i.image, camera.apply(i))
+        else:
+            screen.blit(pygame.transform.rotate(i.image, 90), camera.apply(i))
+    screen.blit(player.image, camera.apply(player))
+    screen.blit(player.recharge, (camera.apply(player)[0], camera.apply(player)[1] - 10))
 
     win.blit(screen, (0, 0))
+    if show_controls == True:
+        win.blit(control.surface, (0, 0))
 
     pygame.display.flip()
     
