@@ -4,11 +4,12 @@ from pygame import Surface
 from pygame.transform import scale
 import pyganim, sys
 
-ANIM_DELAY = 0.1
-ANIMATION_STAY_UP = [('images/tanks/player_up_1.png', ANIM_DELAY)]
-ANIMATION_STAY_DOWN = [('images/tanks/player_down_1.png', ANIM_DELAY)]
-ANIMATION_STAY_LEFT = [('images/tanks/player_left_1.png', ANIM_DELAY)]
-ANIMATION_STAY_RIGHT = [('images/tanks/player_right_1.png', ANIM_DELAY)]
+ANIMATION_DELAY = 0.1
+
+ANIMATION_STAY_UP = [('images/tanks/player_up_1.png', ANIMATION_DELAY)]
+ANIMATION_STAY_DOWN = [('images/tanks/player_down_1.png', ANIMATION_DELAY)]
+ANIMATION_STAY_LEFT = [('images/tanks/player_left_1.png', ANIMATION_DELAY)]
+ANIMATION_STAY_RIGHT = [('images/tanks/player_right_1.png', ANIMATION_DELAY)]
 
 ANIMATION_RIGHT = ['images/tanks/player_right_2.png',
                    'images/tanks/player_right_1.png'
@@ -57,16 +58,16 @@ class Player(Sprite):
         self.boltAnimStayRight.play()
         self.boltAnimStayUp.play()
 
-        self.boltAnimRight = make_boltAnimation(ANIMATION_RIGHT, ANIM_DELAY)
+        self.boltAnimRight = make_boltAnimation(ANIMATION_RIGHT, ANIMATION_DELAY)
         self.boltAnimRight.play()
 
-        self.boltAnimLeft = make_boltAnimation(ANIMATION_LEFT, ANIM_DELAY)
+        self.boltAnimLeft = make_boltAnimation(ANIMATION_LEFT, ANIMATION_DELAY)
         self.boltAnimLeft.play()
 
-        self.boltAnimUp = make_boltAnimation(ANIMATION_UP, ANIM_DELAY)
+        self.boltAnimUp = make_boltAnimation(ANIMATION_UP, ANIMATION_DELAY)
         self.boltAnimUp.play()
 
-        self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIM_DELAY)
+        self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIMATION_DELAY)
         self.boltAnimDown.play()
 
     def update(self, left, right, up, down, lleft, lright, lup, ldown, sprites, screen, target_list):
@@ -117,7 +118,6 @@ class Player(Sprite):
         if self.lifes == 0:
             sprites.remove(self)
             target_list.remove(self)
-        print(target_list)
 
 
     def collide(self, xvel, yvel, sprites):

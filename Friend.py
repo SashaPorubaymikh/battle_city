@@ -4,27 +4,25 @@ from Bullet import Bullet
 import pyganim
 import random
 
-ANIMATION_DELAY = 0.1
+ANIM_DELAY = 0.1
+ANIMATION_STAY_UP = [('images/tanks/player_up_1.png', ANIM_DELAY)]
+ANIMATION_STAY_DOWN = [('images/tanks/player_down_1.png', ANIM_DELAY)]
+ANIMATION_STAY_LEFT = [('images/tanks/player_left_1.png', ANIM_DELAY)]
+ANIMATION_STAY_RIGHT = [('images/tanks/player_right_1.png', ANIM_DELAY)]
 
-ANIMATION_STAY_UP = [('images/tanks/enemy_up_1.png', ANIMATION_DELAY)]
-ANIMATION_STAY_DOWN = [('images/tanks/enemy_down_1.png', ANIMATION_DELAY)]
-ANIMATION_STAY_LEFT = [('images/tanks/enemy_left_1.png', ANIMATION_DELAY)]
-ANIMATION_STAY_RIGHT = [('images/tanks/enemy_right_1.png', ANIMATION_DELAY)]
-
-ANIMATION_RIGHT = ['images/tanks/enemy_right_2.png',
-                   'images/tanks/enemy_right_1.png'
+ANIMATION_RIGHT = ['images/tanks/player_right_2.png',
+                   'images/tanks/player_right_1.png'
 ]
-ANIMATION_UP = ['images/tanks/enemy_up_2.png',
-                'images/tanks/enemy_up_1.png'
+ANIMATION_UP = ['images/tanks/player_up_2.png',
+                'images/tanks/player_up_1.png'
 ]
-ANIMATION_LEFT = ['images/tanks/enemy_left_2.png',
-                  'images/tanks/enemy_left_1.png'
+ANIMATION_LEFT = ['images/tanks/player_left_2.png',
+                  'images/tanks/player_left_1.png'
 ]
-ANIMATION_DOWN = ['images/tanks/enemy_down_2.png',
-                  'images/tanks/enemy_down_1.png'
+ANIMATION_DOWN = ['images/tanks/player_down_2.png',
+                  'images/tanks/player_down_1.png'
 ]
-
-class Enemy(Sprite):
+class Friend(Sprite):
     def __init__(self, x, y):
         Sprite.__init__(self)
         self.image = Surface((40, 40))
@@ -53,10 +51,10 @@ class Enemy(Sprite):
         self.AnimStayDown = pyganim.PygAnimation(ANIMATION_STAY_DOWN)
         self.AnimStayleft = pyganim.PygAnimation(ANIMATION_STAY_LEFT)
 
-        self.AnimGoUp = make_anim(ANIMATION_UP, ANIMATION_DELAY)
-        self.AnimGoRight = make_anim(ANIMATION_RIGHT, ANIMATION_DELAY)
-        self.AnimGoDown = make_anim(ANIMATION_DOWN, ANIMATION_DELAY)
-        self.AnimGoLeft = make_anim(ANIMATION_LEFT, ANIMATION_DELAY)
+        self.AnimGoUp = make_anim(ANIMATION_UP, ANIM_DELAY)
+        self.AnimGoRight = make_anim(ANIMATION_RIGHT, ANIM_DELAY)
+        self.AnimGoDown = make_anim(ANIMATION_DOWN, ANIM_DELAY)
+        self.AnimGoLeft = make_anim(ANIMATION_LEFT, ANIM_DELAY)
 
         self.AnimGoDown.play()
         self.AnimGoLeft.play()
