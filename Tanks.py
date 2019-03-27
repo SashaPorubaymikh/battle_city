@@ -49,7 +49,7 @@ def make_level(level_num, xx, yy):
         x = 0
     player.rect.x = xx
     player.rect.y = yy
-make_level(0, 680, 640)
+make_level(0, 720, 640)
 
 #Создание камеры
 class Camera(object):
@@ -144,9 +144,9 @@ while done:
                 else:
                     show_controls = False
             if e.key == pygame.K_1:
-                make_level(0, 680, 640)
+                make_level(0, 720, 640)
             if e.key == pygame.K_2:
-                make_level(1, 40, 40)
+                make_level(1, 80, 40)
 
         if e.type == pygame.MOUSEBUTTONDOWN and player.ready == True and len(bullets_group)<5:
             player.ready = False
