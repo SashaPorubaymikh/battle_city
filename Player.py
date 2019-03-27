@@ -69,12 +69,12 @@ class Player(Sprite):
         self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIM_DELAY)
         self.boltAnimDown.play()
 
-    def update(self, left, right, up, down, lleft, lright, lup, ldown, blocks, screen):
+    def update(self, left, right, up, down, lleft, lright, lup, ldown, sprites, screen):
         if not(self.ready):
             self.timer += 1
-            self.recharge = Surface((self.timer * 4, 5))
-            self.recharge.fill((self.timer * 25, 250 - self.timer * self.timer, 0))
-        if self.timer == 10:
+            self.recharge = Surface((self.timer, 5))
+            self.recharge.fill((250 - self.timer * 6, self.timer * 6, 0))
+        if self.timer == 40:
             self.timer = 0
             self.ready = True
             self.recharge = Surface((40, 5))
@@ -109,13 +109,13 @@ class Player(Sprite):
             self.xvel = 0
             self.boltAnimStayUp.blit(self.image, (0, 0))
         self.rect.x += self.xvel
-        self.collide(self.xvel, 0, blocks)
+        self.collide(self.xvel, 0, sprites)
         self.rect.y += self.yvel
-        self.collide(0, self.yvel, blocks)
+        self.collide(0, self.yvel, sprites)
 
 
-    def collide(self, xvel, yvel, platforms):
-        for pl in platforms:
+    def collide(self, xvel, yvel, sprites):
+        for pl in sprites:
             if collide_rect(self, pl):
                 if xvel > 0:
                     self.rect.right = pl.rect.left

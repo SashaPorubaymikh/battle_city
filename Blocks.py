@@ -9,8 +9,9 @@ class Blocks(Sprite):
         self.rect.x = x
         self.rect.y = y
         self.lifes = lifes
-    def update(self, group):
+    def update(self, group, group2):
         if self.lifes == 0:
             group.remove(self)
+            group2.remove(self)
 
     
