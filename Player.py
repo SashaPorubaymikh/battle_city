@@ -38,7 +38,7 @@ class Player(Sprite):
         self.recharge = Surface((0, 5))
         self.recharge.fill((250, 0, 0))
         self.MOVE_SPEED = 1
-        self.lifes = 1
+        self.lifes = 3
 
         #Создание анимации
         def make_boltAnimation(anim_list, delay):

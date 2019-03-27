@@ -36,7 +36,7 @@ class Enemy(Sprite):
         self.ready = False
         self.timer = 0
         self.MOVE_SPEED = 1
-        self.lifes = 1
+        self.lifes = 3
         self.dir = ''
         self.ldir = 'down'
         self.min_x = self.min_y = 100000
