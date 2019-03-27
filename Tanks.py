@@ -17,7 +17,9 @@ screen = pygame.Surface((scr_w, scr_h))
 full_screen = True
 
 #Создание персножа
+sprite_group = []
 player = Player(100, 100)
+sprite_group.append(player)
 left = right = up = down = lup = ldown = lright = lleft = False
 lup = True
 bullets_group = []
@@ -41,15 +43,17 @@ def make_level(level_num, xx, yy):
             if col == '0':
                 b1 = Blocks(x, y, 'images/blocks/brick.png', 1)
                 bricks_group.append(b1)
+                sprite_group.append(b1)
             if col == '1':
                 b1 = Blocks(x, y, 'images/blocks/experimentalbrick.png', 10)
                 bricks_group.append(b1)
+                sprite_group.append(b1)
             x += 40
         y += 40
         x = 0
     player.rect.x = xx
     player.rect.y = yy
-make_level(0, 680, 640)
+make_level(0, 720, 640)
 
 #Создание камеры
 class Camera(object):
@@ -123,20 +127,20 @@ while done:
             if e.key == pygame.K_DOWN or e.key == pygame.K_s:
                 down = ldown = True
                 lup = up = right = lright = left = lleft = False
-            if e.key == pygame.K_SPACE and player.ready == True and len(bullets_group)<5:
+            if e.key == pygame.K_SPACE and player.ready == True:
                 player.ready = False
                 player.timer = 0
                 if up or lup:
-                    bull = Bullet(player.rect.x + 18, player.rect.y+10, 'images/bullets/pbullet_ver.png', 'up')
+                    bull = Bullet(player.rect.x + 18, player.rect.y, 'images/bullets/pbullet_ver.png', 'up')
                     bullets_group.append(bull)
                 if down or ldown:
-                    bull = Bullet(player.rect.x + 18, player.rect.y+40, 'images/bullets/pbullet_ver.png', 'down')
+                    bull = Bullet(player.rect.x + 18, player.rect.y+30, 'images/bullets/pbullet_ver.png', 'down')
                     bullets_group.append(bull)
                 if left or lleft:
-                    bull = Bullet(player.rect.x - 10, player.rect.y + 18, 'images/bullets/pbullet_ver.png', 'left')
+                    bull = Bullet(player.rect.x, player.rect.y + 18, 'images/bullets/pbullet_ver.png', 'left')
                     bullets_group.append(bull)
                 if right or lright:
-                    bull = Bullet(player.rect.x + 40, player.rect.y + 18, 'images/bullets/pbullet_ver.png', 'right')
+                    bull = Bullet(player.rect.x + 30, player.rect.y + 18, 'images/bullets/pbullet_ver.png', 'right')
                     bullets_group.append(bull)
             if e.key == pygame.K_c:
                 if show_controls == False:
@@ -148,20 +152,20 @@ while done:
             if e.key == pygame.K_2:
                 make_level(1, 40, 40)
 
-        if e.type == pygame.MOUSEBUTTONDOWN and player.ready == True and len(bullets_group)<5:
+        if e.type == pygame.MOUSEBUTTONDOWN and player.ready == True:
             player.ready = False
             player.timer = 0
             if up or lup:
-                bull = Bullet(player.rect.x + 18, player.rect.y+10, 'images/bullets/pbullet_ver.png', 'up')
+                bull = Bullet(player.rect.x + 18, player.rect.y, 'images/bullets/pbullet_ver.png', 'up')
                 bullets_group.append(bull)
             if down or ldown:
-                bull = Bullet(player.rect.x + 18, player.rect.y+40, 'images/bullets/pbullet_ver.png', 'down')
+                bull = Bullet(player.rect.x + 18, player.rect.y+30, 'images/bullets/pbullet_ver.png', 'down')
                 bullets_group.append(bull)
             if left or lleft:
-                bull = Bullet(player.rect.x - 10, player.rect.y + 18, 'images/bullets/pbullet_ver.png', 'left')
+                bull = Bullet(player.rect.x, player.rect.y + 18, 'images/bullets/pbullet_ver.png', 'left')
                 bullets_group.append(bull)
             if right or lright:
-                bull = Bullet(player.rect.x + 40, player.rect.y + 18, 'images/bullets/pbullet_ver.png', 'right')
+                bull = Bullet(player.rect.x + 30, player.rect.y + 18, 'images/bullets/pbullet_ver.png', 'right')
                 bullets_group.append(bull)
 
         if e.type == pygame.KEYUP:
@@ -179,11 +183,11 @@ while done:
     player.update(left, right, up, down, lleft, lright, lup, ldown, bricks_group, screen)
     camera.update(player)
     for i in bullets_group:
-        i.update(i.dir, screen, bricks_group, bullets_group, lvl_w, lvl_h)
+        i.update(i.dir, screen, sprite_group, bullets_group, lvl_w, lvl_h)
 
     #отрисовка объектов
     for i in bricks_group:
-        i.update(bricks_group)
+        i.update(bricks_group, sprite_group)
     for i in bricks_group:
         screen.blit(i.image, camera.apply(i))
     for i in bullets_group:
