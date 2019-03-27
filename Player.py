@@ -2,7 +2,7 @@ from pygame.sprite import Sprite, collide_rect
 from pygame import image
 from pygame import Surface
 from pygame.transform import scale
-import pyganim
+import pyganim, sys
 
 ANIM_DELAY = 0.1
 ANIMATION_STAY_UP = [('images/tanks/player_up_1.png', ANIM_DELAY)]
@@ -69,7 +69,9 @@ class Player(Sprite):
         self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIM_DELAY)
         self.boltAnimDown.play()
 
-    def update(self, left, right, up, down, lleft, lright, lup, ldown, sprites, screen):
+    def update(self, left, right, up, down, lleft, lright, lup, ldown, sprites, screen, target_list):
+        
+            
         if not(self.ready):
             self.timer += 1
             self.recharge = Surface((self.timer, 5))
@@ -112,11 +114,15 @@ class Player(Sprite):
         self.collide(self.xvel, 0, sprites)
         self.rect.y += self.yvel
         self.collide(0, self.yvel, sprites)
+        if self.lifes == 0:
+            sprites.remove(self)
+            target_list.remove(self)
+        print(target_list)
 
 
     def collide(self, xvel, yvel, sprites):
         for pl in sprites:
-            if collide_rect(self, pl):
+            if collide_rect(self, pl) and pl != self:
                 if xvel > 0:
                     self.rect.right = pl.rect.left
                 if xvel < 0:
