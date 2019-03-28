@@ -111,7 +111,7 @@ show_controls = False
 done = True
 clock = pygame.time.Clock()
 pygame.key.set_repeat(10, 10)
-menu.menu()
+menu.menu(screen, win)
 
 while done:
     left = right = up = down = False
@@ -128,7 +128,7 @@ while done:
                     win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
                     full_screen = True
             if e.key == pygame.K_ESCAPE:
-                pause.menu()
+                pause.menu(screen, win)
             if e.key == pygame.K_LEFT or e.key == pygame.K_a:
                 left = lleft = True
                 lright = ldown = lup = up = down = right = False

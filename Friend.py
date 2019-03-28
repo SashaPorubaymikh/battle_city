@@ -69,6 +69,7 @@ class Friend(Sprite):
 
     def find_way(self, target_list, bullets_group):
         if len(target_list) > 0:
+            print(target_list)
             for x in target_list:
                 if abs(x.rect.x - self.rect.x) < self.min_x:
                     self.min_x = abs(x.rect.x - self.rect.x)

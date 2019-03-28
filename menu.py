@@ -1,3 +1,8 @@
+import pygame, sys
+pygame.init()
+infos = pygame.display.Info()
+screen_size = (infos.current_w, infos.current_h)
+scr_h = infos.current_h
 
 class Menu:
     def __init__(self, punkts = [120, 140, u'Punkt', (20, 20, 20), (50, 50, 50), 0]):
@@ -8,7 +13,7 @@ class Menu:
                 surface.blit(font.render(i[2], 1, i[4]), (i[0], i[1]))
             else:
                 surface.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
-    def menu(self):
+    def menu(self, screen, window):
         done = True
         font_menu = pygame.font.Font ('fonts/ComicTalecopy.ttf', 100)
         pygame.key.set_repeat(1, 100)
