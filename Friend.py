@@ -6,25 +6,25 @@ import random
 
 ANIMATION_DELAY = 0.1
 
-ANIMATION_STAY_UP = [('images/tanks/enemy_up_1.png', ANIMATION_DELAY)]
-ANIMATION_STAY_DOWN = [('images/tanks/enemy_down_1.png', ANIMATION_DELAY)]
-ANIMATION_STAY_LEFT = [('images/tanks/enemy_left_1.png', ANIMATION_DELAY)]
-ANIMATION_STAY_RIGHT = [('images/tanks/enemy_right_1.png', ANIMATION_DELAY)]
+ANIMATION_STAY_UP = [('images/tanks/player_up_1.png', ANIMATION_DELAY)]
+ANIMATION_STAY_DOWN = [('images/tanks/player_down_1.png', ANIMATION_DELAY)]
+ANIMATION_STAY_LEFT = [('images/tanks/player_left_1.png', ANIMATION_DELAY)]
+ANIMATION_STAY_RIGHT = [('images/tanks/player_right_1.png', ANIMATION_DELAY)]
 
-ANIMATION_RIGHT = ['images/tanks/enemy_right_2.png',
-                   'images/tanks/enemy_right_1.png'
+ANIMATION_RIGHT = ['images/tanks/player_right_2.png',
+                   'images/tanks/player_right_1.png'
 ]
-ANIMATION_UP = ['images/tanks/enemy_up_2.png',
-                'images/tanks/enemy_up_1.png'
+ANIMATION_UP = ['images/tanks/player_up_2.png',
+                'images/tanks/player_up_1.png'
 ]
-ANIMATION_LEFT = ['images/tanks/enemy_left_2.png',
-                  'images/tanks/enemy_left_1.png'
+ANIMATION_LEFT = ['images/tanks/player_left_2.png',
+                  'images/tanks/player_left_1.png'
 ]
-ANIMATION_DOWN = ['images/tanks/enemy_down_2.png',
-                  'images/tanks/enemy_down_1.png'
+ANIMATION_DOWN = ['images/tanks/player_down_2.png',
+                  'images/tanks/player_down_1.png'
 ]
 
-class Enemy(Sprite):
+class Friend(Sprite):
     def __init__(self, x, y):
         Sprite.__init__(self)
         self.image = Surface((40, 40))
@@ -179,5 +179,5 @@ class Enemy(Sprite):
             bull = Bullet(self.rect.x + 18, self.rect.y+40, 'images/bullets/pbullet_ver.png', dir)
             bullets_group.append(bull)
         if dir == 'up':
-            bull = Bullet(self.rect.x + 18, self.rect.y+10, 'images/bullets/pbullet_ver.png', dir)
+            bull = Bullet(self.rect.x + 18, self.rect.y, 'images/bullets/pbullet_ver.png', dir)
             bullets_group.append(bull)
