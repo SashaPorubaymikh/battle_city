@@ -6,6 +6,7 @@ from Bullet import Bullet
 from Controls import Controls
 from Enemy import Enemy
 from Friend import Friend
+from menu import Menu, punkts, punkts1
 pygame.init()
 pygame.font.init()
 
@@ -32,6 +33,10 @@ enemy_target_list = []
 #Создание друга
 friend = Friend(0, 0)
 friend_target_list = []
+
+#Создание меню
+pause = Menu(punkts1)
+menu = Menu(punkts)
 
 #Создание уровня
 levels = []
@@ -106,6 +111,7 @@ show_controls = False
 done = True
 clock = pygame.time.Clock()
 pygame.key.set_repeat(10, 10)
+menu.menu()
 
 while done:
     left = right = up = down = False
@@ -122,7 +128,7 @@ while done:
                     win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
                     full_screen = True
             if e.key == pygame.K_ESCAPE:
-                done = False
+                pause.menu()
             if e.key == pygame.K_LEFT or e.key == pygame.K_a:
                 left = lleft = True
                 lright = ldown = lup = up = down = right = False
