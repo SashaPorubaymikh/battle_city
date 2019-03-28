@@ -31,4 +31,7 @@ class Bullet(Sprite):
                 b.lifes -= 1
                 bullets_group.remove(self)
                 break
+        for b in bullets_group:
+            if collide_rect(self, b) and b != self:
+                bullets_group.remove(b)
 
