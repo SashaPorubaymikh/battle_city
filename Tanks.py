@@ -156,7 +156,7 @@ while done:
                 else:
                     show_controls = False
             if e.key == pygame.K_1:
-                sprite_group = [Player(720, 640), Enemy(80, 40), Enemy(1360, 40), Friend(800, 680), Friend(640, 680), Enemy(120, 40), Enemy(1320, 40)]
+                sprite_group = [Player(720, 640), Enemy(80, 40), Enemy(1360, 40), Friend(800, 680), Friend(640, 680), Enemy(120, 90), Enemy(1260, 100)]
                 enemy_target_list = [sprite_group[0], sprite_group[3], sprite_group[4]]
                 friend_target_list = [sprite_group[1], sprite_group[2], sprite_group[5], sprite_group[6]]
                 make_level(0)
