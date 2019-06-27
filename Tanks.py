@@ -58,7 +58,11 @@ def make_level(level_num):
                 bricks_group.append(b1)
                 sprite_group.append(b1)
             if col == '1':
-                b1 = Blocks(x, y, 'images/blocks/experimentalbrick.png', 10)
+                b1 = Blocks(x, y, 'images/blocks/experimentalbrick.png', 1000000)
+                bricks_group.append(b1)
+                sprite_group.append(b1)
+            if col == '2':
+                b1 = Blocks(x, y, 'images/blocks/steel_brick.png', 1000000)
                 bricks_group.append(b1)
                 sprite_group.append(b1)
             x += 40
@@ -157,11 +161,6 @@ while done:
                 if right or lright:
                     bull = Bullet(sprite_group[0].rect.x + 30, sprite_group[0].rect.y + 18, 'images/bullets/pbullet_ver.png', 'right')
                     bullets_group.append(bull)
-            if e.key == pygame.K_c:
-                if show_controls == False:
-                    show_controls = True
-                else:
-                    show_controls = False
             if e.key == pygame.K_1:
                 sprite_group = [Player(720, 640), Enemy(80, 40), Enemy(1360, 40), Friend(800, 680), Friend(640, 680), Enemy(120, 90), Enemy(1260, 100)]
                 enemy_target_list = [sprite_group[0], sprite_group[3], sprite_group[4]]
@@ -171,6 +170,13 @@ while done:
                 sprite_group = []
                 enemy_target_list = []
                 make_level(1)
+
+        if e.type == pygame.KEYUP:
+            if e.key == pygame.K_c:
+                if show_controls == False:
+                    show_controls = True
+                else:
+                    show_controls = False
 
         if e.type == pygame.MOUSEBUTTONDOWN  and isinstance(sprite_group[0], Player) and sprite_group[0].ready == True:
             if e.button == 1:

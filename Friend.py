@@ -37,8 +37,9 @@ class Friend(Sprite):
         self.timer = 0
         self.MOVE_SPEED = 1
         self.lifes = 3
-        self.dir = ''
+        self.dir = 'down'
         self.ldir = 'down'
+        self.dirs = ['up', 'down', 'left', 'right']
         self.min_x = self.min_y = 100000
 
         def make_anim(anim_list, delay):
@@ -67,67 +68,14 @@ class Friend(Sprite):
         self.AnimStayRight.play()
         self.AnimStayUp.play()
 
-    def find_way(self, target_list, bullets_group):
-        if len(target_list) > 0:
-            print(target_list)
-            for x in target_list:
-                if abs(x.rect.x - self.rect.x) < self.min_x:
-                    self.min_x = abs(x.rect.x - self.rect.x)
-                if abs(x.rect.y - self.rect.y) < self.min_y:
-                    self.min_y = abs(x.rect.y - self.rect.y)
-            if self.min_x < self.min_y:
-                if x.rect.x - self.rect.x > 0:
-                    self.dir = 'right'
-                    self.ldir = 'right'
-                if x.rect.x - self.rect.x < 0:
-                    self.dir = 'left'
-                    self.ldir = 'left'
-                if x.rect.x - self.rect.x == 0:
-                    if x.rect.y - self.rect.y > 0:
-                        self.dir = ''
-                        self.ldir = 'down'
-                        if self.ready:
-                            self.shoot(self.ldir, bullets_group)
-                            self.ready = False
-                    if x.rect.y - self.rect.y < 0:
-                        self.dir = ''
-                        self.ldir = 'up'
-                        if self.ready:
-                            self.shoot(self.ldir, bullets_group)
-                            self.ready = False
-            else:
-                if x.rect.y - self.rect.y < 0:
-                    self.dir = 'up'
-                    self.ldir = 'up'
-                if x.rect.y - self.rect.y > 0:
-                    self.dir = 'down'
-                    self.ldir = 'down'
-                if x.rect.y - self.rect.y == 0:
-                    if x.rect.x - self.rect.x < 0:
-                        self.dir = ''
-                        self.ldir = 'left'
-                        if self.ready:
-                            self.shoot(self.ldir, bullets_group)
-                            self.ready = False
-                    if x.rect.x - self.rect.x > 0:
-                        self.dir = ''
-                        self.ldir = 'right'
-                        if self.ready:
-                            self.shoot(self.ldir, bullets_group)
-                            self.ready = False
-        else:
-            self.dir = ''
-                        
     def update(self, sprites, target_list, bullets_group, lvl_w, lvl_h, target_list_1):
 
         if self.ready == False:
             self.timer += 1
         if self.timer == 60:
-            self.timer = 0
-            self.ready = True
+            self.shoot(self.dir, bullets_group)
         self.xvel = self.yvel = 0
         self.min_x = self.min_y = 10000
-        self.find_way(target_list, bullets_group)
         if self.dir == 'up':
             self.yvel = -self.MOVE_SPEED
             self.AnimGoUp.blit(self.image, (0, 0))
@@ -149,12 +97,17 @@ class Friend(Sprite):
         if self.ldir == 'up' and self.dir == '':
             self.AnimStayUp.blit(self.image, (0, 0))
         self.rect.x += self.xvel
-        self.collide(self.xvel, 0, sprites)
+        if self.collide(self.xvel, 0, sprites):
+            random.shuffle(self.dirs)
+            self.dir = self.ldir = self.dirs[0]
         self.rect.y += self.yvel
-        self.collide(0, self.yvel, sprites)
+        if self.collide(0, self.yvel, sprites):
+            random.shuffle(self.dirs)
+            self.dir = self.ldir = self.dirs[0]
         if self.lifes == 0:
             sprites.remove(self)
             target_list_1.remove(self)
+        if len(target_list) == 0: self.dir = ''
 
     def collide(self, xvel, yvel, sprites):
         for pl in sprites:
@@ -168,17 +121,20 @@ class Friend(Sprite):
                     self.rect.bottom = pl.rect.top
                 if yvel < 0:
                     self.rect.top = pl.rect.bottom
+                return True
 
     def shoot(self, dir, bullets_group):
+        self.ready = False
+        self.timer = 0
         if dir == 'left':
-            bull = Bullet(self.rect.x - 10, self.rect.y + 18, 'images/bullets/ebullet_ver.png', dir)
+            bull = Bullet(self.rect.x - 10, self.rect.y + 18, 'images/bullets/pbullet_ver.png', dir)
             bullets_group.append(bull)
         if dir == 'right':
-            bull = Bullet(self.rect.x + 50, self.rect.y + 18, 'images/bullets/ebullet_ver.png', dir)
+            bull = Bullet(self.rect.x + 50, self.rect.y + 18, 'images/bullets/pbullet_ver.png', dir)
             bullets_group.append(bull)
         if dir == 'down':
             bull = Bullet(self.rect.x + 18, self.rect.y+40, 'images/bullets/pbullet_ver.png', dir)
             bullets_group.append(bull)
         if dir == 'up':
-            bull = Bullet(self.rect.x + 18, self.rect.y, 'images/bullets/pbullet_ver.png', dir)
+            bull = Bullet(self.rect.x + 18, self.rect.y-10, 'images/bullets/pbullet_ver.png', dir)
             bullets_group.append(bull)

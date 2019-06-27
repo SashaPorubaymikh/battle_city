@@ -34,4 +34,5 @@ class Bullet(Sprite):
         for b in bullets_group:
             if collide_rect(self, b) and b != self:
                 bullets_group.remove(b)
+                bullets_group.remove(self)
 
