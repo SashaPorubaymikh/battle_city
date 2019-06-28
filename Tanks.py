@@ -11,7 +11,9 @@ from Enemy import Enemy
 from Friend import Friend
 from status_bar import Status_bar
 from timer import Timer
-from menu import Menu, Pause, Options, punkts, punkts1, punkts2
+from menu import Menu, Pause, End_of_game, Options, punkts, punkts1, punkts2, \
+    punkts3, punkts4
+from flag import Flag
 
 pygame.init()
 pygame.font.init()
@@ -38,6 +40,8 @@ enemies = friends = 0
 pause = Pause(punkts1, "Pause")
 menu = Menu(punkts, "Battle city")
 options = Options(punkts2, 'Options')
+u_win = End_of_game(punkts3, "You win!")
+u_lose = End_of_game(punkts4, 'Game over')
 current_diff = 0
 
 #Создание строки состояния
@@ -99,6 +103,8 @@ def make_level(level_num, max_e, total_e, diff):
             if col == 'p':
                 sprite_group = [Player(x, y)] + sprite_group
                 friends += 1
+            if col == 'b':
+                sprite_group.append(Flag(x, y))
             x += 40
         y += 40
         x = 0
@@ -268,6 +274,12 @@ while done:
             if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h) == 0:
                 friends -= 1
             screen.blit(i.image, camera.apply(i))
+        if isinstance(i, Flag):
+            if i.update(sprite_group) == "game over":
+                u_lose.menu(screen, win)
+                launch_menu = True
+            else:
+                screen.blit(i.image, (camera.apply(i)[0], camera.apply(i)[1]))
     if timer.update() == True:
         for i in enemy_spavner_group:
             if enemies < max_enemies and spavned_enemies < total_enemies:
@@ -275,6 +287,14 @@ while done:
                 enemies += 1
                 spavned_enemies += 1
     status_bar.show(sprite_group[0].lifes, friends, total_enemies - spavned_enemies, stage, screen, scr_w)
+
+    if friends == 0:
+        u_lose.menu(screen, win)
+        launch_menu = True
+    if spavned_enemies == total_enemies and enemies == 0:
+        u_win.menu(screen, win)
+        launch_menu = True
+    
 
     if show_controls == True:
         win.blit(control.surface, (0, 0))

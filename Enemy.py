@@ -38,11 +38,9 @@ class Enemy(Sprite):
         self.MOVE_SPEED = 1
         if diff == 2:
             self.MOVE_SPEED = 3
-        self.lifes = 3
-        if diff == 1:
-            self.lifes += 2
+        self.lifes = 1
         if diff == 2:
-            self.lifes += 7
+            self.lifes = 2
         self.dir = 'down'
         self.ldir = 'down'
         self.min_x = self.min_y = 100000
@@ -116,7 +114,7 @@ class Enemy(Sprite):
             return 0
         if friends == 0: 
             self.dir = ''
-        if random.randint(0, 50) == 3:
+        if random.randint(0, 50) == 3 and self.rect.x % 10 == 0 and self.rect.y % 10 == 0:
             random.shuffle(self.dirs)
             self.dir = self.ldir = self.dirs[0]
 
