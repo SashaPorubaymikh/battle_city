@@ -115,12 +115,16 @@ class Pause:
                             done = False
                             return 'new game'
                         if punkt == 1:
+                            return 'restart'
+                        if punkt == 2:
                             return 'exit'
                 if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                     if punkt == 0:
                         done = False
                         return 'resume'
                     if punkt == 1:
+                        return 'restart'
+                    if punkt == 2:
                         return 'exit'
 
             window.blit(screen, (0, 0))
@@ -265,9 +269,9 @@ punkts = [
 ]
 
 punkts1 = [
-    (90, scr_h - 268, u'Resume', (30, 30, 30), (252, 102, 12), 0, 450),
-    #(90, scr_h - 268, u'Options', (30, 30, 30), (252, 102, 12), 1, 450),
-    (90, scr_h - 168, u'Main menu', (30, 30, 30), (252, 102, 12), 1, 450)
+    (90, scr_h - 368, u'Resume', (30, 30, 30), (252, 102, 12), 0, 450),
+    (90, scr_h - 268, u'Restart', (30, 30, 30), (252, 102, 12), 1, 450),
+    (90, scr_h - 168, u'Main menu', (30, 30, 30), (252, 102, 12), 2, 450)
 ]
     
 punkts2 = [

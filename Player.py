@@ -116,7 +116,6 @@ class Player(Sprite):
             else:
                 self.xvel = 0
             self.yvel = 0
-            self.yvel = 0
             self.boltAnimStayRight.blit(self.image, (0, 0))
         elif self.ldir == 'down' and self.dir == '':
             if self.rect.y % 10 != 0:

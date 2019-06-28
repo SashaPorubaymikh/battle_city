@@ -65,7 +65,7 @@ lvl_w = lvl_h = 0
 def make_level(level_num, max_e, total_e, diff):
     x = y = 0
     global bricks_group, sprite_group, lvl_w, lvl_h, enemies, \
-        friends, stage, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group
+        friends, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group
 
     enemy_spavner_group = []
     bullets_group = []
@@ -79,7 +79,6 @@ def make_level(level_num, max_e, total_e, diff):
         max_e += 4
         total_enemies += 10
     spavned_enemies = 0
-    stage = level_num + 1
     bricks_group = []
     sprite_group = []
     enemies = friends = 0
@@ -185,6 +184,9 @@ while done:
                         menureturn = options.menu(screen, win, current_diff)
                         current_diff = menureturn
                         launch_menu = True
+                if menureturn == 'restart':
+                    stage = 0
+                    make_level(stage, 6, 20, current_diff)
                     
                 pygame.key.set_repeat(10, 10)
 
@@ -285,14 +287,16 @@ while done:
                 sprite_group.append(Enemy(i[0], i[1], current_diff))
                 enemies += 1
                 spavned_enemies += 1
-    status_bar.show(sprite_group[0].lifes, friends, total_enemies - spavned_enemies, stage, screen, scr_w)
+    status_bar.show(sprite_group[0].lifes, friends, total_enemies - spavned_enemies, stage + 1, screen, scr_w)
 
     if friends == 0:
         u_lose.menu(screen, win)
         launch_menu = True
     if spavned_enemies == total_enemies and enemies == 0:
         u_win.menu(screen, win)
-        launch_menu = True
+        stage += 1
+        if stage < len(levels):
+            make_level(stage, 6, 20, current_diff)
     
 
     if show_controls == True:
