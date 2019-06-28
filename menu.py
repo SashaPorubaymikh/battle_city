@@ -1,4 +1,5 @@
 import pygame, sys
+
 pygame.init()
 infos = pygame.display.Info()
 screen_size = (infos.current_w, infos.current_h)
@@ -32,22 +33,29 @@ class Menu:
                     sys.exit()
                 if e.type == pygame.KEYDOWN:
                     if e.key == pygame.K_ESCAPE:
-                        sys.exit()
+                        return 'exit'
                     if e.key == pygame.K_UP:
-                        if punkt > 0:
+                        if punkt >= 0:
                             punkt -= 1
-                        if punkt == 0:
-                            punkt = len(self.punkts)
+                        if punkt == -1:
+                            punkt = len(self.punkts)-1
                     if e.key == pygame.K_DOWN:
-                        if punkt < len(self.punkts):
+                        if punkt <= len(self.punkts):
                             punkt += 1
                         if punkt == len(self.punkts):
                             punkt = 0
+                    if e.key == pygame.K_KP_ENTER or e.key == pygame.K_RETURN:
+                        if punkt == 0:
+                            done = False
+                            return 'game'
+                        if punkt == 2:
+                            return 'exit'
                 if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                     if punkt == 0:
                         done = False
+                        return 'game'
                     if punkt == 2:
-                        sys.exit()
+                        return 'exit'
 
             window.blit(screen, (0, 0))
             pygame.display.flip()
@@ -58,4 +66,4 @@ punkts = [(90, scr_h - 368, u'New Game', (30, 30, 30), (252, 102, 12), 0, 450),
 
 punkts1 = [(90, scr_h - 368, u'Resume', (30, 30, 30), (252, 102, 12), 0, 450),
            (90, scr_h - 268, u'Options', (30, 30, 30), (252, 102, 12), 1, 450),
-           (90, scr_h - 168, u'Quit', (30, 30, 30), (252, 102, 12), 2, 450)]
+           (90, scr_h - 168, u'Main menu', (30, 30, 30), (252, 102, 12), 2, 450)]

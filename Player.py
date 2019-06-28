@@ -40,6 +40,7 @@ class Player(Sprite):
         self.MOVE_SPEED = 1
         self.lifes = 3
         self.type = 'f'
+        self.isdead = False
 
         #Создание анимации
         def make_boltAnimation(anim_list, delay):
@@ -117,7 +118,8 @@ class Player(Sprite):
         self.rect.y += self.yvel
         self.collide(0, self.yvel, sprites)
         if self.lifes == 0: 
-            sprites.remove(self)
+            #sprites.remove(self)
+            self.isdead = True
             return 0
 
 

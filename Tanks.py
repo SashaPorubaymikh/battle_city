@@ -1,4 +1,7 @@
+import sys
+
 import pygame
+
 from Levels import level1, level2
 from Blocks import Blocks
 from Player import Player
@@ -6,7 +9,9 @@ from Bullet import Bullet
 from Controls import Controls
 from Enemy import Enemy
 from Friend import Friend
+from status_bar import Status_bar
 from menu import Menu, punkts, punkts1
+
 pygame.init()
 pygame.font.init()
 
@@ -33,8 +38,12 @@ enemies = friends = 0
 pause = Menu(punkts1)
 menu = Menu(punkts)
 
+#Создание строки состояния
+status_bar = Status_bar(0, 0)
+
 #Создание уровня
 levels = []
+stage = 0
 bricks_group = []
 enemy_spavner_group = []
 levels.append(level1)
@@ -43,7 +52,8 @@ level_num = 0
 lvl_w = lvl_h = 0
 def make_level(level_num):
     x = y = 0
-    global bricks_group, sprite_group, lvl_w, lvl_h, enemies, friends
+    global bricks_group, sprite_group, lvl_w, lvl_h, enemies, friends, stage
+    stage = level_num + 1
     bricks_group = []
     sprite_group = []
     enemies = friends = 0
@@ -115,8 +125,10 @@ control.show()
 #Конфигурации главного цикла
 show_controls = False
 done = True
+
 clock = pygame.time.Clock()
-menu.menu(screen, win)
+if menu.menu(screen, win) == 'exit':
+    sys.exit()
 pygame.key.set_repeat(10, 10)
 
 while done:
@@ -127,7 +139,13 @@ while done:
             
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_ESCAPE:
-                pause.menu(screen, win)
+                menureturn = pause.menu(screen, win)
+                if menureturn == 'exit':
+                    menureturn = menu.menu(screen, win)
+                    if menureturn == 'exit':
+                        done = False
+                    if menureturn == 'game':
+                        make_level(0)
                 pygame.key.set_repeat(10, 10)
             if e.key == pygame.K_LEFT or e.key == pygame.K_a:
                 left = lleft = True
@@ -186,16 +204,16 @@ while done:
                 sprite_group[0].ready = False
                 sprite_group[0].timer = 0
                 if up or lup:
-                    bull = Bullet(sprite_group[0].rect.x + 18, sprite_group[0].rect.y, 'images/bullets/pbullet_ver.png', 'up')
+                    bull = Bullet(sprite_group[0].rect.x + 18, sprite_group[0].rect.y, 'images/bullets/pbullet_ver.png', 'up', 'f')
                     bullets_group.append(bull)
                 if down or ldown:
-                    bull = Bullet(sprite_group[0].rect.x + 18, sprite_group[0].rect.y+30, 'images/bullets/pbullet_ver.png', 'down')
+                    bull = Bullet(sprite_group[0].rect.x + 18, sprite_group[0].rect.y+30, 'images/bullets/pbullet_ver.png', 'down', 'f')
                     bullets_group.append(bull)
                 if left or lleft:
-                    bull = Bullet(sprite_group[0].rect.x, sprite_group[0].rect.y + 18, 'images/bullets/pbullet_ver.png', 'left')
+                    bull = Bullet(sprite_group[0].rect.x, sprite_group[0].rect.y + 18, 'images/bullets/pbullet_ver.png', 'left', 'f')
                     bullets_group.append(bull)
                 if right or lright:
-                    bull = Bullet(sprite_group[0].rect.x + 30, sprite_group[0].rect.y + 18, 'images/bullets/pbullet_ver.png', 'right')
+                    bull = Bullet(sprite_group[0].rect.x + 30, sprite_group[0].rect.y + 18, 'images/bullets/pbullet_ver.png', 'right', 'f')
                     bullets_group.append(bull)
 
         if e.type == pygame.KEYUP:
@@ -226,26 +244,30 @@ while done:
         camera.update(sprite_group[0])
     for i in bullets_group:
         i.update(i.dir, screen, sprite_group, bullets_group, lvl_w, lvl_h)
-    for i in sprite_group:
+    for i in reversed(sprite_group):
         if isinstance(i, Enemy):
             if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h) == 0:
                 enemies -= 1
             screen.blit(i.image, camera.apply(i))
-        if isinstance(i, Player):
+        if isinstance(i, Player) and i.isdead == False:
             if i.update(left, right, up, down, lleft, lright, lup, ldown, sprite_group, screen, friends) == 0:
                 friends -= 1
             screen.blit(i.image, camera.apply(i))
             screen.blit(i.recharge, (camera.apply(i)[0], camera.apply(i)[1] - 10))
+        elif isinstance(i, Player) and i.isdead == True:
+            i.rect.x = i.rect.y = -40
         if isinstance(i, Friend):
             if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h) == 0:
                 friends -= 1
             screen.blit(i.image, camera.apply(i))
     
-    
+    status_bar.show(sprite_group[0].lifes, friends, enemies, stage, screen, scr_w)
 
-    win.blit(screen, (0, 0))
     if show_controls == True:
         win.blit(control.surface, (0, 0))
+
+    win.blit(screen, (0, 0))
+    
 
     pygame.display.flip()
     
