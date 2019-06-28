@@ -223,7 +223,7 @@ while done:
             if e.key == pygame.K_RIGHT or e.key == pygame.K_d:
                 sprite_group[0].dir = ''
 
-        if e.type == pygame.MOUSEBUTTONDOWN  and isinstance(sprite_group[0], Player) and sprite_group[0].ready == True:
+        if e.type == pygame.MOUSEBUTTONDOWN  and sprite_group[0].isdead == False and sprite_group[0].ready == True:
             if e.button == 1:
                 sprite_group[0].shoot(bullets_group)    
 
@@ -241,7 +241,6 @@ while done:
             
     screen.fill((5, 5, 5))
 
-    
     #отрисовка объектов
     for i in bricks_group:
         i.update(bricks_group, sprite_group)
