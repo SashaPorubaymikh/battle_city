@@ -109,6 +109,9 @@ class Friend(Sprite):
             sprites.remove(self)   
             return 0
         if enemies == 0: self.dir = ''
+        if enemies != 0 and self.dir == '':
+            random.shuffle(self.dirs)
+            self.dir = self.dirs[0]
 
     def collide(self, xvel, yvel, sprites):
         for pl in sprites:

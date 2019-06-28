@@ -4,6 +4,8 @@ from pygame import Surface
 from pygame.transform import scale
 import pyganim, sys
 
+from Bullet import Bullet
+
 ANIMATION_DELAY = 0.1
 
 ANIMATION_STAY_UP = [('images/tanks/player_up_1.png', ANIMATION_DELAY)]
@@ -41,6 +43,8 @@ class Player(Sprite):
         self.lifes = 3
         self.type = 'f'
         self.isdead = False
+        self.dir = ''
+        self.ldir = 'up'
 
         #Создание анимации
         def make_boltAnimation(anim_list, delay):
@@ -72,7 +76,7 @@ class Player(Sprite):
         self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIMATION_DELAY)
         self.boltAnimDown.play()
 
-    def update(self, left, right, up, down, lleft, lright, lup, ldown, sprites, screen, friends):
+    def update(self, sprites, screen, friends):
         
             
         if not(self.ready):
@@ -85,31 +89,32 @@ class Player(Sprite):
             self.recharge = Surface((40, 5))
             self.recharge.fill((0, 250, 0))
         #screen.blit(self.recharge, (self.rect.x, self.rect.y - 10))
-        if left:
+        self.yvel = self.xvel = 0
+        if self.dir == 'left':
             self.xvel = -self.MOVE_SPEED
             self.boltAnimLeft.blit(self.image, (0, 0))
-        if right:
+        elif self.dir == 'right':
             self.xvel = self.MOVE_SPEED
             self.boltAnimRight.blit(self.image, (0, 0))
-        if up:
+        elif self.dir == 'up':
             self.yvel = -self.MOVE_SPEED
             self.boltAnimUp.blit(self.image, (0, 0))
-        if down:
+        elif self.dir == 'down':
             self.yvel = self.MOVE_SPEED
             self.boltAnimDown.blit(self.image, (0, 0))
-        if lleft and not(left):
+        elif self.ldir == 'left' and self.dir == '':
             self.yvel = 0
             self.xvel = 0
             self.boltAnimStayLeft.blit(self.image, (0, 0))
-        if lright and not(right):
+        elif self.ldir == 'right' and self.dir == '':
             self.yvel = 0
             self.xvel = 0
             self.boltAnimStayRight.blit(self.image, (0, 0))
-        if ldown and not(down):
+        elif self.ldir == 'down' and self.dir == '':
             self.yvel = 0
             self.xvel = 0
             self.boltAnimStayDown.blit(self.image, (0, 0))
-        if lup and not(up):
+        if self.ldir == 'up' and self.dir == '':
             self.yvel = 0
             self.xvel = 0
             self.boltAnimStayUp.blit(self.image, (0, 0))
@@ -135,3 +140,18 @@ class Player(Sprite):
                 if yvel < 0:
                     self.rect.top = pl.rect.bottom
             
+    def shoot(self, bullets_group):
+        self.ready = False
+        self.timer = 0
+        if self.ldir == 'left':
+            bull = Bullet(self.rect.x - 10, self.rect.y + 18, 'images/bullets/pbullet_ver.png', self.ldir, 'f')
+            bullets_group.append(bull)
+        if self.ldir == 'right':
+            bull = Bullet(self.rect.x + 50, self.rect.y + 18, 'images/bullets/pbullet_ver.png', self.ldir, 'f')
+            bullets_group.append(bull)
+        if self.ldir == 'down':
+            bull = Bullet(self.rect.x + 18, self.rect.y+40, 'images/bullets/pbullet_ver.png', self.ldir, 'f')
+            bullets_group.append(bull)
+        if self.ldir == 'up':
+            bull = Bullet(self.rect.x + 18, self.rect.y-10, 'images/bullets/pbullet_ver.png', self.ldir, 'f')
+            bullets_group.append(bull)

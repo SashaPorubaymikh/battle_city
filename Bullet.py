@@ -23,8 +23,6 @@ class Bullet(Sprite):
         if self.dir == 'right':
             self.rect.x += self.speed
         self.collide(sprites, bullets_group)
-        if self.rect.x < 0 or self.rect.y < 0 or self.rect.x > lvl_w or self.rect.y > lvl_h:
-            bullets_group.remove(self)
 
     def collide(self, sprites, bullets_group):
         for b in sprites:
