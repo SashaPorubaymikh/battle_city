@@ -1,6 +1,6 @@
 class Timer:
     def __init__(self):
-        self.timer = 199
+        self.timer = 0
     def update(self):
         self.timer += 1
         if self.timer == 200:

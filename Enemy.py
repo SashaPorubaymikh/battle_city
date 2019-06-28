@@ -25,7 +25,7 @@ ANIMATION_DOWN = ['images/tanks/enemy_down_2.png',
 ]
 
 class Enemy(Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, diff):
         Sprite.__init__(self)
         self.image = Surface((40, 40))
         self.image.set_colorkey((255, 255, 255))
@@ -37,6 +37,10 @@ class Enemy(Sprite):
         self.timer = 0
         self.MOVE_SPEED = 1
         self.lifes = 3
+        if diff == 1:
+            self.lifes += 2
+        if diff == 2:
+            self.lifes += 7
         self.dir = 'down'
         self.ldir = 'down'
         self.min_x = self.min_y = 100000

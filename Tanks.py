@@ -11,7 +11,7 @@ from Enemy import Enemy
 from Friend import Friend
 from status_bar import Status_bar
 from timer import Timer
-from menu import Menu, punkts, punkts1
+from menu import Menu, Pause, Options, punkts, punkts1, punkts2
 
 pygame.init()
 pygame.font.init()
@@ -35,8 +35,10 @@ bullets_group = []
 enemies = friends = 0
 
 #Создание меню
-pause = Menu(punkts1)
-menu = Menu(punkts)
+pause = Pause(punkts1, "Pause")
+menu = Menu(punkts, "Battle city")
+options = Options(punkts2, 'Options')
+current_diff = 0
 
 #Создание строки состояния
 status_bar = Status_bar(0, 0)
@@ -56,11 +58,22 @@ levels.append(level1)
 levels.append(level2)
 level_num = 0
 lvl_w = lvl_h = 0
-def make_level(level_num, max_e, total_e):
+def make_level(level_num, max_e, total_e, diff):
     x = y = 0
-    global bricks_group, sprite_group, lvl_w, lvl_h, enemies, friends, stage, max_enemies, total_enemies
+    global bricks_group, sprite_group, lvl_w, lvl_h, enemies, \
+        friends, stage, max_enemies, total_enemies, spavned_enemies
+
+    bullets_group = []
+    timer.timer = 0
     max_enemies = max_e
     total_enemies = total_e
+    if diff == 1:
+        max_e += 2
+        total_enemies += 5
+    if diff == 2:
+        max_e += 4
+        total_enemies += 10
+    spavned_enemies = 0
     stage = level_num + 1
     bricks_group = []
     sprite_group = []
@@ -88,7 +101,7 @@ def make_level(level_num, max_e, total_e):
             x += 40
         y += 40
         x = 0
-make_level(0, 6, 20)
+
 
 #Создание камеры
 class Camera(object):
@@ -113,17 +126,17 @@ def camera_func(camera, target_rect):
     t = min(0, t)
  
     return pygame.Rect(l, t, w, h)
-camera = Camera(camera_func, lvl_w, lvl_h)
+
 
 #Отображениe управления
-controls_list = ['Escape - exit',
-                 'W, arrow up - move up',
-                 'D, arrow right - move right',
-                 'S, arrow down - move down',
-                 'A, arrow left - move left',
-                 'F - turn on/turn off fullscreen mode',
-                 'Space, mouse click - shoot',
-                 'C - show/hide controls list']
+controls_list = ['Escape - меню',
+                 'W, arrow up - ехать вверх',
+                 'D, arrow right - ухать вправо',
+                 'S, arrow down - ехать вниз',
+                 'A, arrow left - ехать влево',
+                 'F - включить/выключить полноэкранный режим',
+                 'Space, mouse click - выстрел'
+]
 
 control = Controls(scr_w, scr_h, controls_list)
 control.show()
@@ -131,17 +144,26 @@ control.show()
 #Конфигурации главного цикла
 show_controls = False
 done = True
+launch_menu = False
 
 clock = pygame.time.Clock()
-if menu.menu(screen, win) == 'exit':
+make_level(0, 6, 20, current_diff)
+menureturn = menu.menu(screen, win)
+if menureturn == 'exit':
     sys.exit()
+if menureturn == 'options':
+    current_diff = options.menu(screen, win, current_diff)
+    launch_menu = True
+if menureturn == 'new game':
+    make_level(0, 6, 20, current_diff)
+camera = Camera(camera_func, lvl_w, lvl_h)
+
 pygame.key.set_repeat(10, 10)
 
 while done:
-    left = right = up = down = False
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
-            done = False
+            sys.exit()
             
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_ESCAPE:
@@ -149,9 +171,14 @@ while done:
                 if menureturn == 'exit':
                     menureturn = menu.menu(screen, win)
                     if menureturn == 'exit':
-                        done = False
-                    if menureturn == 'game':
-                        make_level(0, 6, 20)
+                        sys.exit()
+                    if menureturn == 'new game':
+                        make_level(0, 6, 20, current_diff)
+                    if menureturn == 'options':
+                        menureturn = options.menu(screen, win, current_diff)
+                        current_diff = menureturn
+                        launch_menu = True
+                    
                 pygame.key.set_repeat(10, 10)
 
             if e.key == pygame.K_LEFT or e.key == pygame.K_a:
@@ -164,15 +191,6 @@ while done:
                 sprite_group[0].dir = sprite_group[0].ldir = 'down'
             if e.key == pygame.K_SPACE and sprite_group[0].ready == True and sprite_group[0].isdead == False:
                 sprite_group[0].shoot(bullets_group)
-            # if e.key == pygame.K_1:
-            #     sprite_group = [Player(720, 640), Enemy(80, 40), Enemy(1360, 40), Friend(800, 680), Friend(640, 680), Enemy(120, 90), Enemy(1260, 100)]
-            #     enemy_target_list = [sprite_group[0], sprite_group[3], sprite_group[4]]
-            #     friend_target_list = [sprite_group[1], sprite_group[2], sprite_group[5], sprite_group[6]]
-            #     make_level(0)
-            # if e.key == pygame.K_2:
-            #     sprite_group = []
-            #     enemy_target_list = []
-            #     make_level(1)
 
         if e.type == pygame.KEYUP:
             if e.key == pygame.K_c:
@@ -200,9 +218,22 @@ while done:
 
         if e.type == pygame.MOUSEBUTTONDOWN  and isinstance(sprite_group[0], Player) and sprite_group[0].ready == True:
             if e.button == 1:
-                sprite_group[0].shoot(bullets_group)            
+                sprite_group[0].shoot(bullets_group)    
+
+    if launch_menu:
+        launch_menu = False
+        menureturn = menu.menu(screen, win)  
+        if menureturn == 'exit':
+            sys.exit()
+        if menureturn == 'new game':
+            make_level(0, 6, 20, current_diff)
+        if menureturn == 'options':
+            menureturn = options.menu(screen, win, current_diff)
+            current_diff = menureturn
+            launch_menu = True      
             
     screen.fill((5, 5, 5))
+
     
     #отрисовка объектов
     for i in bricks_group:
@@ -239,7 +270,7 @@ while done:
     if timer.update() == True and spavned_enemies < total_enemies:
         for i in enemy_spavner_group:
             if enemies < max_enemies:
-                sprite_group.append(Enemy(i[0], i[1]))
+                sprite_group.append(Enemy(i[0], i[1], current_diff))
                 enemies += 1
                 spavned_enemies += 1
     status_bar.show(sprite_group[0].lifes, friends, total_enemies - spavned_enemies, stage, screen, scr_w)
