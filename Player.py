@@ -39,6 +39,7 @@ class Player(Sprite):
         self.recharge.fill((250, 0, 0))
         self.MOVE_SPEED = 1
         self.lifes = 3
+        self.type = 'f'
 
         #Создание анимации
         def make_boltAnimation(anim_list, delay):
@@ -70,7 +71,7 @@ class Player(Sprite):
         self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIMATION_DELAY)
         self.boltAnimDown.play()
 
-    def update(self, left, right, up, down, lleft, lright, lup, ldown, sprites, screen, target_list):
+    def update(self, left, right, up, down, lleft, lright, lup, ldown, sprites, screen, friends):
         
             
         if not(self.ready):
@@ -115,9 +116,9 @@ class Player(Sprite):
         self.collide(self.xvel, 0, sprites)
         self.rect.y += self.yvel
         self.collide(0, self.yvel, sprites)
-        if self.lifes == 0:
+        if self.lifes == 0: 
             sprites.remove(self)
-            target_list.remove(self)
+            return 0
 
 
     def collide(self, xvel, yvel, sprites):

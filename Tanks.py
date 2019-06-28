@@ -26,13 +26,8 @@ left = right = up = down = lup = ldown = lright = lleft = False
 lup = True
 bullets_group = []
 
-#Создание врага
-enemy = Enemy(0, 0)
-enemy_target_list = []
-
-#Создание друга
-friend = Friend(0, 0)
-friend_target_list = []
+#Персонаж, врги и друзья
+enemies = friends = 0
 
 #Создание меню
 pause = Menu(punkts1)
@@ -41,14 +36,17 @@ menu = Menu(punkts)
 #Создание уровня
 levels = []
 bricks_group = []
+enemy_spavner_group = []
 levels.append(level1)
 levels.append(level2)
 level_num = 0
 lvl_w = lvl_h = 0
 def make_level(level_num):
     x = y = 0
-    global bricks_group, lvl_w, lvl_h
+    global bricks_group, sprite_group, lvl_w, lvl_h, enemies, friends
     bricks_group = []
+    sprite_group = []
+    enemies = friends = 0
     lvl_h = len(levels[level_num]) * 40
     for row in levels[level_num]:
         lvl_w = len(row) * 40
@@ -61,15 +59,19 @@ def make_level(level_num):
                 b1 = Blocks(x, y, 'images/blocks/experimentalbrick.png', 1000000)
                 bricks_group.append(b1)
                 sprite_group.append(b1)
-            if col == '2':
-                b1 = Blocks(x, y, 'images/blocks/steel_brick.png', 1000000)
-                bricks_group.append(b1)
-                sprite_group.append(b1)
+            if col == 'e':
+                sprite_group.append(Enemy(x, y))
+                enemy_spavner_group.append([x, y])
+                enemies += 1
+            if col == 'f':
+                sprite_group.append(Friend(x, y))
+                friends += 1
+            if col == 'p':
+                sprite_group = [Player(x, y)] + sprite_group
+                friends += 1
             x += 40
         y += 40
         x = 0
-#sprite_group = [Player(720, 720), Enemy(40, 80), Enemy(1340, 40)]
-#enemy_target_list = [sprite_group[0]]
 make_level(0)
 
 #Создание камеры
@@ -124,13 +126,6 @@ while done:
             done = False
             
         if e.type == pygame.KEYDOWN:
-            if e.key == pygame.K_f:
-                if full_screen == True:
-                    win = pygame.display.set_mode((scr_w, scr_h))
-                    full_screen = False
-                else:
-                    win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-                    full_screen = True
             if e.key == pygame.K_ESCAPE:
                 pause.menu(screen, win)
                 pygame.key.set_repeat(10, 10)
@@ -150,25 +145,25 @@ while done:
                 sprite_group[0].ready = False
                 sprite_group[0].timer = 0
                 if up or lup:
-                    bull = Bullet(sprite_group[0].rect.x + 18, sprite_group[0].rect.y, 'images/bullets/pbullet_ver.png', 'up')
+                    bull = Bullet(sprite_group[0].rect.x + 18, sprite_group[0].rect.y, 'images/bullets/pbullet_ver.png', 'up', 'f')
                     bullets_group.append(bull)
                 if down or ldown:
-                    bull = Bullet(sprite_group[0].rect.x + 18, sprite_group[0].rect.y+30, 'images/bullets/pbullet_ver.png', 'down')
+                    bull = Bullet(sprite_group[0].rect.x + 18, sprite_group[0].rect.y+30, 'images/bullets/pbullet_ver.png', 'down', 'f')
                     bullets_group.append(bull)
                 if left or lleft:
-                    bull = Bullet(sprite_group[0].rect.x, sprite_group[0].rect.y + 18, 'images/bullets/pbullet_ver.png', 'left')
+                    bull = Bullet(sprite_group[0].rect.x, sprite_group[0].rect.y + 18, 'images/bullets/pbullet_ver.png', 'left', 'f')
                     bullets_group.append(bull)
                 if right or lright:
-                    bull = Bullet(sprite_group[0].rect.x + 30, sprite_group[0].rect.y + 18, 'images/bullets/pbullet_ver.png', 'right')
+                    bull = Bullet(sprite_group[0].rect.x + 30, sprite_group[0].rect.y + 18, 'images/bullets/pbullet_ver.png', 'right', 'f')
                     bullets_group.append(bull)
             if e.key == pygame.K_1:
-                sprite_group = [Player(720, 640), Enemy(80, 40), Enemy(1360, 40), Friend(800, 680), Friend(640, 680), Enemy(120, 90), Enemy(1260, 100)]
-                enemy_target_list = [sprite_group[0], sprite_group[3], sprite_group[4]]
-                friend_target_list = [sprite_group[1], sprite_group[2], sprite_group[5], sprite_group[6]]
+                #sprite_group = [Player(720, 640), Enemy(80, 40), Enemy(1360, 40), Friend(800, 680), Friend(640, 680), Enemy(120, 90), Enemy(1260, 100)]
+                #enemy_target_list = [sprite_group[0], sprite_group[3], sprite_group[4]]
+                #friend_target_list = [sprite_group[1], sprite_group[2], sprite_group[5], sprite_group[6]]
                 make_level(0)
             if e.key == pygame.K_2:
-                sprite_group = []
-                enemy_target_list = []
+                #sprite_group = []
+                #enemy_target_list = []
                 make_level(1)
 
         if e.type == pygame.KEYUP:
@@ -177,6 +172,14 @@ while done:
                     show_controls = True
                 else:
                     show_controls = False
+
+            if e.key == pygame.K_f:
+                if full_screen == True:
+                    win = pygame.display.set_mode((scr_w, scr_h))
+                    full_screen = False
+                else:
+                    win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+                    full_screen = True
 
         if e.type == pygame.MOUSEBUTTONDOWN  and isinstance(sprite_group[0], Player) and sprite_group[0].ready == True:
             if e.button == 1:
@@ -225,14 +228,17 @@ while done:
         i.update(i.dir, screen, sprite_group, bullets_group, lvl_w, lvl_h)
     for i in sprite_group:
         if isinstance(i, Enemy):
-            i.update(sprite_group, enemy_target_list, bullets_group, lvl_w, lvl_h, friend_target_list)
+            if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h) == 0:
+                enemies -= 1
             screen.blit(i.image, camera.apply(i))
         if isinstance(i, Player):
-            i.update(left, right, up, down, lleft, lright, lup, ldown, sprite_group, screen, enemy_target_list)
+            if i.update(left, right, up, down, lleft, lright, lup, ldown, sprite_group, screen, friends) == 0:
+                friends -= 1
             screen.blit(i.image, camera.apply(i))
             screen.blit(i.recharge, (camera.apply(i)[0], camera.apply(i)[1] - 10))
         if isinstance(i, Friend):
-            i.update(sprite_group, friend_target_list, bullets_group, lvl_w, lvl_h, enemy_target_list)
+            if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h) == 0:
+                friends -= 1
             screen.blit(i.image, camera.apply(i))
     
     

@@ -41,6 +41,7 @@ class Friend(Sprite):
         self.ldir = 'down'
         self.dirs = ['up', 'down', 'left', 'right']
         self.min_x = self.min_y = 100000
+        self.type = 'f'
 
         def make_anim(anim_list, delay):
             boltAnim = []
@@ -68,7 +69,7 @@ class Friend(Sprite):
         self.AnimStayRight.play()
         self.AnimStayUp.play()
 
-    def update(self, sprites, target_list, bullets_group, lvl_w, lvl_h, target_list_1):
+    def update(self, sprites, enemies, friends, bullets_group, lvl_w, lvl_h):
 
         if self.ready == False:
             self.timer += 1
@@ -105,9 +106,9 @@ class Friend(Sprite):
             random.shuffle(self.dirs)
             self.dir = self.ldir = self.dirs[0]
         if self.lifes == 0:
-            sprites.remove(self)
-            target_list_1.remove(self)
-        if len(target_list) == 0: self.dir = ''
+            sprites.remove(self)   
+            return 0
+        if enemies == 0: self.dir = ''
 
     def collide(self, xvel, yvel, sprites):
         for pl in sprites:
@@ -127,14 +128,14 @@ class Friend(Sprite):
         self.ready = False
         self.timer = 0
         if dir == 'left':
-            bull = Bullet(self.rect.x - 10, self.rect.y + 18, 'images/bullets/pbullet_ver.png', dir)
+            bull = Bullet(self.rect.x - 10, self.rect.y + 18, 'images/bullets/pbullet_ver.png', dir, 'f')
             bullets_group.append(bull)
         if dir == 'right':
-            bull = Bullet(self.rect.x + 50, self.rect.y + 18, 'images/bullets/pbullet_ver.png', dir)
+            bull = Bullet(self.rect.x + 50, self.rect.y + 18, 'images/bullets/pbullet_ver.png', dir, 'f')
             bullets_group.append(bull)
         if dir == 'down':
-            bull = Bullet(self.rect.x + 18, self.rect.y+40, 'images/bullets/pbullet_ver.png', dir)
+            bull = Bullet(self.rect.x + 18, self.rect.y+40, 'images/bullets/pbullet_ver.png', dir, 'f')
             bullets_group.append(bull)
         if dir == 'up':
-            bull = Bullet(self.rect.x + 18, self.rect.y-10, 'images/bullets/pbullet_ver.png', dir)
+            bull = Bullet(self.rect.x + 18, self.rect.y-10, 'images/bullets/pbullet_ver.png', dir, 'f')
             bullets_group.append(bull)

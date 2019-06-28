@@ -19,7 +19,6 @@ class Menu:
         pygame.key.set_repeat(1, 100)
         pygame.mouse.set_visible(True)
         punkt = 0
-        print(len(self.punkts))
         while done:
             screen.fill((10, 10, 10))
             

@@ -3,7 +3,7 @@ from pygame.image import load
 from pygame.transform import rotate
 
 class Bullet(Sprite):
-    def __init__(self, x, y, image, direction):
+    def __init__(self, x, y, image, direction, type):
         Sprite.__init__(self)
         self.image = load(image)
         self.rect = self.image.get_rect()
@@ -11,6 +11,7 @@ class Bullet(Sprite):
         self.rect.y = y
         self.dir = direction
         self.speed = 10
+        self.type = type
 
     def update(self, direction, screen, sprites, bullets_group, lvl_w, lvl_h):
         if self.dir == 'up':
@@ -28,7 +29,8 @@ class Bullet(Sprite):
     def collide(self, sprites, bullets_group):
         for b in sprites:
             if collide_rect(self, b):
-                b.lifes -= 1
+                if b.type != self.type:
+                    b.lifes -= 1
                 bullets_group.remove(self)
                 break
         for b in bullets_group:
