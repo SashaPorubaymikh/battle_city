@@ -41,10 +41,10 @@ class Enemy(Sprite):
         self.lifes = 1
         if diff == 2:
             self.lifes = 2
-        self.dir = 'down'
-        self.ldir = 'down'
         self.min_x = self.min_y = 100000
         self.dirs = ["up", "down", "left", "right"]
+        random.shuffle(self.dirs)
+        self.dir = self.ldir = self.dirs[0]
         self.type = 'e'
 
         def make_anim(anim_list, delay):
@@ -114,7 +114,7 @@ class Enemy(Sprite):
             return 0
         if friends == 0: 
             self.dir = ''
-        if random.randint(0, 50) == 3 and self.rect.x % 10 == 0 and self.rect.y % 10 == 0:
+        if random.randint(0, 30) == 1 and self.rect.x % 10 == 0 and self.rect.y % 10 == 0:
             random.shuffle(self.dirs)
             self.dir = self.ldir = self.dirs[0]
 

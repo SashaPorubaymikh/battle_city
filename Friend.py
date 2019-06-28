@@ -112,7 +112,7 @@ class Friend(Sprite):
         if enemies != 0 and self.dir == '':
             random.shuffle(self.dirs)
             self.dir = self.dirs[0]
-        if random.randint(0, 50) == 3 and self.rect.x % 10 == 0 and self.rect.y % 10 == 0:
+        if random.randint(0, 30) == 1 and self.rect.x % 10 == 0 and self.rect.y % 10 == 0:
             random.shuffle(self.dirs)
             self.dir = self.ldir = self.dirs[0]
 
