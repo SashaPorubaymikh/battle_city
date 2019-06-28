@@ -112,6 +112,9 @@ class Friend(Sprite):
         if enemies != 0 and self.dir == '':
             random.shuffle(self.dirs)
             self.dir = self.dirs[0]
+        if random.randint(0, 50) == 3:
+            random.shuffle(self.dirs)
+            self.dir = self.ldir = self.dirs[0]
 
     def collide(self, xvel, yvel, sprites):
         for pl in sprites:

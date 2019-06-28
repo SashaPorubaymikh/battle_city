@@ -36,6 +36,8 @@ class Enemy(Sprite):
         self.ready = False
         self.timer = 0
         self.MOVE_SPEED = 1
+        if diff == 2:
+            self.MOVE_SPEED = 3
         self.lifes = 3
         if diff == 1:
             self.lifes += 2
@@ -114,6 +116,9 @@ class Enemy(Sprite):
             return 0
         if friends == 0: 
             self.dir = ''
+        if random.randint(0, 50) == 3:
+            random.shuffle(self.dirs)
+            self.dir = self.ldir = self.dirs[0]
 
     def collide(self, xvel, yvel, sprites):
         for pl in sprites:

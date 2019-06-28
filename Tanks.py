@@ -61,8 +61,9 @@ lvl_w = lvl_h = 0
 def make_level(level_num, max_e, total_e, diff):
     x = y = 0
     global bricks_group, sprite_group, lvl_w, lvl_h, enemies, \
-        friends, stage, max_enemies, total_enemies, spavned_enemies
+        friends, stage, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group
 
+    enemy_spavner_group = []
     bullets_group = []
     timer.timer = 0
     max_enemies = max_e
@@ -267,9 +268,9 @@ while done:
             if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h) == 0:
                 friends -= 1
             screen.blit(i.image, camera.apply(i))
-    if timer.update() == True and spavned_enemies < total_enemies:
+    if timer.update() == True:
         for i in enemy_spavner_group:
-            if enemies < max_enemies:
+            if enemies < max_enemies and spavned_enemies < total_enemies:
                 sprite_group.append(Enemy(i[0], i[1], current_diff))
                 enemies += 1
                 spavned_enemies += 1
