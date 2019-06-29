@@ -142,17 +142,13 @@ class Options:
     def render(self, surface, font, num_punkt):
         for i in self.punkts:
             if num_punkt == i[5]:
-                if i[5] == 1:
+                if i[5] == 0:
                     surface.blit(font.render(i[2] + self.difficulties[self.dif_punkt], 1, i[4]), (i[0], i[1]))
-                elif i[5] == 0:
-                    surface.blit(font.render(i[2] + str(self.zoom), 1, i[4]), (i[0], i[1]))
                 else:
                     surface.blit(font.render(i[2], 1, i[4]), (i[0], i[1]))
             else:
-                if i[5] == 1:
+                if i[5] == 0:
                     surface.blit(font.render(i[2] + self.difficulties[self.dif_punkt], 1, i[3]), (i[0], i[1]))
-                elif i[5] == 0:
-                    surface.blit(font.render(i[2] + str(self.zoom), 1, i[3]), (i[0], i[1]))
                 else:
                     surface.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
     def menu(self, screen, window, dif_punkt, zoom):
@@ -187,27 +183,21 @@ class Options:
                         if punkt == len(self.punkts):
                             punkt = 0
                     if e.key == pygame.K_KP_ENTER or e.key == pygame.K_RETURN:
-                        if punkt == 2:
+                        if punkt == 1:
                             return [self.dif_punkt, self.zoom]
                     if e.key == pygame.K_RIGHT:
-                        if punkt == 1:
+                        if punkt == 0:
                             self.dif_punkt += 1
                             if self.dif_punkt == len(self.difficulties):
                                 self.dif_punkt = 0
-                        if punkt == 0:
-                            if self.zoom < 4:
-                                self.zoom += 1
                     if e.key == pygame.K_LEFT:
-                        if punkt == 1:
+                        if punkt == 0:
                             self.dif_punkt -= 1
                             if self.dif_punkt == -1:
                                 self.dif_punkt = len(self.difficulties) - 1
-                        if punkt == 0:
-                            if self.zoom > 1:
-                                self.zoom -= 1
                 if e.type == pygame.MOUSEBUTTONDOWN:
                     if e.button == 1:
-                        if punkt == 2:
+                        if punkt == 1:
                             return [self.dif_punkt, self.zoom]
 
             window.blit(screen, (0, 0))
@@ -278,9 +268,8 @@ punkts1 = [
 ]
     
 punkts2 = [
-    (90, scr_h - 368, u'Zoom: ', (30, 30, 30), (252, 102, 12), 0, 450),
-    (90, scr_h - 268, u'Difficulty: ', (30, 30, 30), (252, 102, 12), 1, 450),
-    (90, scr_h - 168, u'Back ', (30, 30, 30), (252, 102, 12), 2, 450)
+    (90, scr_h - 268, u'Difficulty: ', (30, 30, 30), (252, 102, 12), 0, 450),
+    (90, scr_h - 168, u'Back ', (30, 30, 30), (252, 102, 12), 1, 450)
 ]
 punkts3 = [
     (scr_w // 2 - 225, 250, u'Next level', (255, 255, 255), (252, 102, 12), 0, 450)
