@@ -169,40 +169,10 @@ if menureturn == 'new game':
 pygame.key.set_repeat(10, 10)
 
 while done:
+
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             sys.exit()
-            
-        if e.type == pygame.KEYDOWN:
-            if e.key == pygame.K_ESCAPE:
-                menureturn = pause.menu(screen, win)
-                if menureturn == 'exit':
-                    menureturn = menu.menu(screen, win)
-                    if menureturn == 'exit':
-                        sys.exit()
-                    if menureturn == 'new game':
-                        make_level(0, 6, 20, current_diff)
-                        camera = Camera(camera_func, lvl_w, lvl_h)
-                    if menureturn == 'options':
-                        menureturn = options.menu(screen, win, current_diff, 1)
-                        current_diff = menureturn
-                        launch_menu = True
-                if menureturn == 'restart':
-                    stage = 0
-                    make_level(stage, 6, 20, current_diff)
-                    
-                pygame.key.set_repeat(10, 10)
-
-            if e.key == pygame.K_LEFT or e.key == pygame.K_a:
-                sprite_group[0].dir = sprite_group[0].ldir = 'left'
-            elif e.key == pygame.K_RIGHT or e.key == pygame.K_d:
-                sprite_group[0].dir = sprite_group[0].ldir = 'right'
-            elif e.key == pygame.K_UP or e.key == pygame.K_w:
-                sprite_group[0].dir = sprite_group[0].ldir = 'up'
-            elif e.key == pygame.K_DOWN or e.key == pygame.K_s:
-                sprite_group[0].dir = sprite_group[0].ldir = 'down'
-            if e.key == pygame.K_SPACE and sprite_group[0].ready == True and sprite_group[0].isdead == False:
-                sprite_group[0].shoot(bullets_group)
 
         if e.type == pygame.KEYUP:
             if e.key == pygame.K_c:
@@ -231,6 +201,37 @@ while done:
         if e.type == pygame.MOUSEBUTTONDOWN  and sprite_group[0].isdead == False and sprite_group[0].ready == True:
             if e.button == 1:
                 sprite_group[0].shoot(bullets_group)    
+
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_ESCAPE]:
+        menureturn = pause.menu(screen, win)
+        if menureturn == 'exit':
+            menureturn = menu.menu(screen, win)
+            if menureturn == 'exit':
+                sys.exit()
+            if menureturn == 'new game':
+                make_level(0, 6, 20, current_diff)
+                camera = Camera(camera_func, lvl_w, lvl_h)
+            if menureturn == 'options':
+                menureturn = options.menu(screen, win, current_diff, 1)
+                current_diff = menureturn
+                launch_menu = True
+        if menureturn == 'restart':
+            stage = 0
+            make_level(stage, 6, 20, current_diff)
+            
+        pygame.key.set_repeat(10, 10)
+    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+        sprite_group[0].dir = sprite_group[0].ldir = 'left'
+    if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+        sprite_group[0].dir = sprite_group[0].ldir = 'down'
+    if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+        sprite_group[0].dir = sprite_group[0].ldir = 'right'
+    if keys[pygame.K_UP] or keys[pygame.K_w]:
+        sprite_group[0].dir = sprite_group[0].ldir = 'up'
+    if keys[pygame.K_SPACE] and sprite_group[0].ready == True and sprite_group[0].isdead == False:
+        sprite_group[0].shoot(bullets_group)
 
     if launch_menu:
         launch_menu = False
