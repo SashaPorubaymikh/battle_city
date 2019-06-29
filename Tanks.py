@@ -25,6 +25,7 @@ scr_w = infos.current_w
 scr_h = infos.current_h
 win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen = pygame.Surface((1366, 768))
+pygame.display.set_icon("images/tanks/player_up_1.png")
 full_screen = True
 
 #Создание перснaжа
