@@ -11,8 +11,8 @@ from Enemy import Enemy
 from Friend import Friend
 from status_bar import Status_bar
 from timer import Timer
-from menu import Menu, Pause, End_of_game, Options, Level_choose, punkts, punkts1, punkts2, \
-    punkts3, punkts4, punkts5
+from menu import Menu, Pause, End_of_game, Options, Level_choose, Mode_choose, \
+    punkts, punkts1, punkts2, punkts3, punkts4, punkts5, punkts6
 from flag import Flag
 
 pygame.init()
@@ -42,7 +42,9 @@ options = Options(punkts2, 'Options')
 u_win = End_of_game(punkts3, "You win!")
 u_lose = End_of_game(punkts4, 'Game over')
 level_choose = Level_choose(punkts5, 'Choose level')
+mode_choose = Mode_choose(punkts6, 'Choose mode')
 current_diff = 0
+current_mode = 0
 
 #Создание строки состояния
 status_bar = Status_bar(0, 0)
@@ -59,7 +61,7 @@ bricks_group = []
 enemy_spavner_group = []
 level_num = 0
 lvl_w = lvl_h = 0
-def make_level(level_num, max_e, total_e, diff):
+def make_level(level_num, max_e, total_e, diff, mode):
     x = y = 0
     global bricks_group, sprite_group, lvl_w, lvl_h, enemies, \
         friends, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group,\
@@ -69,7 +71,10 @@ def make_level(level_num, max_e, total_e, diff):
     bullets_group = []
     timer.timer = 0
     max_enemies = max_e
-    total_enemies = total_e
+    if mode == 0:
+        total_enemies = total_e
+    elif mode == 1:
+        total_enemies = -1
     if diff == 1:
         max_e += 2
         total_enemies += 5
@@ -100,7 +105,7 @@ def make_level(level_num, max_e, total_e, diff):
             if col == 'p':
                 sprite_group = [Player(x, y)] + sprite_group
                 friends += 1
-            if col == 'b':
+            if col == 'b' and mode == 0:
                 sprite_group.append(Flag(x, y))
             x += 40
         y += 40
@@ -153,7 +158,7 @@ done = True
 launch_menu = False
 
 clock = pygame.time.Clock()
-make_level(stage, 6, 20, current_diff)
+make_level(stage, 6, 20, current_diff, current_mode)
 menureturn = menu.menu(screen, win)
 if menureturn == 'exit':
     sys.exit()
@@ -162,11 +167,16 @@ elif menureturn == 'options':
     current_diff = menureturn
     launch_menu = True
 elif menureturn == 'new game':
-    menureturn = level_choose.menu(screen, win)
+    menureturn = mode_choose.menu(screen, win)
     if menureturn != 'launch menu':
-        stage = menureturn
-        make_level(stage, 6, 20, current_diff)
-        camera = Camera(camera_func, lvl_w, lvl_h)
+        current_mode = menureturn
+        menureturn = level_choose.menu(screen, win)
+        if menureturn != 'launch menu':
+            stage = menureturn
+            make_level(stage, 6, 20, current_diff, current_mode)
+            camera = Camera(camera_func, lvl_w, lvl_h)
+        else:
+            launch_menu = True
     else:
         launch_menu = True
 
@@ -216,11 +226,16 @@ while done:
             if menureturn == 'exit':
                 sys.exit()
             elif menureturn == 'new game':
-                menureturn = level_choose.menu(screen, win)
+                menureturn = mode_choose.menu(screen, win)
                 if menureturn != 'launch menu':
-                    stage = menureturn
-                    make_level(stage, 6, 20, current_diff)
-                    camera = Camera(camera_func, lvl_w, lvl_h)
+                    current_mode = menureturn
+                    menureturn = level_choose.menu(screen, win)
+                    if menureturn != 'launch menu':
+                        stage = menureturn
+                        make_level(stage, 6, 20, current_diff, current_mode)
+                        camera = Camera(camera_func, lvl_w, lvl_h)
+                    else:
+                        launch_menu = True
                 else:
                     launch_menu = True
             elif menureturn == 'options':
@@ -249,11 +264,16 @@ while done:
         if menureturn == 'exit':
             sys.exit()
         elif menureturn == 'new game':
-            menureturn = level_choose.menu(screen, win)
+            menureturn = mode_choose.menu(screen, win)
             if menureturn != 'launch menu':
-                stage = menureturn
-                make_level(stage, 6, 20, current_diff)
-                camera = Camera(camera_func, lvl_w, lvl_h)
+                current_mode = menureturn
+                menureturn = level_choose.menu(screen, win)
+                if menureturn != 'launch menu':
+                    stage = menureturn
+                    make_level(stage, 6, 20, current_diff, current_mode)
+                    camera = Camera(camera_func, lvl_w, lvl_h)
+                else:
+                    launch_menu = True
             else:
                 launch_menu = True
         elif menureturn == 'options':
@@ -303,11 +323,15 @@ while done:
                 screen.blit(i.image, (camera.apply(i)[0], camera.apply(i)[1]))
     if timer.update() == True:
         for i in enemy_spavner_group:
-            if enemies < max_enemies and spavned_enemies < total_enemies:
+            if enemies < max_enemies and (spavned_enemies < total_enemies or current_mode == 1):
                 sprite_group.append(Enemy(i[0], i[1], current_diff))
                 enemies += 1
                 spavned_enemies += 1
-    status_bar.show(sprite_group[0].lifes, friends, total_enemies - spavned_enemies, stage + 1, screen, scr_w)
+    if current_mode == 0: 
+        status_bar.show(sprite_group[0].lifes, friends, total_enemies - spavned_enemies, stage + 1, screen, scr_w)
+    elif current_mode == 1:
+        status_bar.show(sprite_group[0].lifes, friends, spavned_enemies, stage + 1, screen, scr_w)
+
 
     if friends == 0:
         u_lose.menu(screen, win)
