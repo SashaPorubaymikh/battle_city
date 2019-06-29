@@ -34,7 +34,7 @@ SOUTHEAST = 'southeast'
 
 
 class PygAnimation(object):
-    def __init__(self, frames, loop=True):
+    def __init__(self, frames, zoom, loop=True):
         self._images = []
         self._durations = []
         self._startTimes = None
@@ -57,7 +57,9 @@ class PygAnimation(object):
                 assert type(frame[0]) in (str, pygame.Surface), 'Frame %s image must be a string filename or a pygame.Surface' % (i)
                 assert frame[1] > 0, 'Frame %s duration must be greater than zero.' % (i)
                 if type(frame[0]) == str:
-                    frame = (pygame.image.load(frame[0]), frame[1])
+                    tmp_image = pygame.image.load(frame[0])
+                    tmp_image = pygame.transform.scale(tmp_image, (40 + 10 * (zoom - 1), 40 + 10 * (zoom - 1)))
+                    frame = (tmp_image, frame[1])
                 self._images.append(frame[0])
                 self._durations.append(frame[1])
             self._startTimes = self._getStartTimes()
