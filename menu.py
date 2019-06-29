@@ -65,7 +65,7 @@ class Menu:
                     if punkt == 2:
                         return 'exit'
 
-            window.blit(pygame.transform.scale(screen, (scr_w, scr_h)), (0, 0))
+            window.blit(pygame.transform.scale(screen, (1920, 1080)), (0, 0))
             pygame.display.flip()
 
 class Pause:
