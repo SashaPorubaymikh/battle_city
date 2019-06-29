@@ -65,7 +65,7 @@ class Menu:
                     if punkt == 2:
                         return 'exit'
 
-            window.blit(screen, (0, 0))
+            win.blit(pygame.transform.scale(screen, (scr_w, scr_h)), (0, 0))
             pygame.display.flip()
 
 class Pause:
@@ -127,7 +127,7 @@ class Pause:
                     if punkt == 2:
                         return 'exit'
 
-            window.blit(screen, (0, 0))
+            win.blit(pygame.transform.scale(screen, (scr_w, scr_h)), (0, 0))
             pygame.display.flip()
 
 class Options:
@@ -200,7 +200,7 @@ class Options:
                         if punkt == 1:
                             return [self.dif_punkt, self.zoom]
 
-            window.blit(screen, (0, 0))
+            win.blit(pygame.transform.scale(screen, (scr_w, scr_h)), (0, 0))
             pygame.display.flip()
 
 class End_of_game:
@@ -252,7 +252,7 @@ class End_of_game:
                     if punkt == 0:
                         return i[2]
 
-            window.blit(screen, (0, 0))
+            win.blit(pygame.transform.scale(screen, (scr_w, scr_h)), (0, 0))
             pygame.display.flip()
 
 punkts = [
