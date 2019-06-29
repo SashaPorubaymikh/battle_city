@@ -157,11 +157,11 @@ make_level(stage, 6, 20, current_diff)
 menureturn = menu.menu(screen, win)
 if menureturn == 'exit':
     sys.exit()
-if menureturn == 'options':
+elif menureturn == 'options':
     menureturn = options.menu(screen, win, current_diff)
     current_diff = menureturn
     launch_menu = True
-if menureturn == 'new game':
+elif menureturn == 'new game':
     menureturn = level_choose.menu(screen, win)
     if menureturn != 'launch menu':
         stage = menureturn
@@ -215,7 +215,7 @@ while done:
             menureturn = menu.menu(screen, win)
             if menureturn == 'exit':
                 sys.exit()
-            if menureturn == 'new game':
+            elif menureturn == 'new game':
                 menureturn = level_choose.menu(screen, win)
                 if menureturn != 'launch menu':
                     stage = menureturn
@@ -223,11 +223,11 @@ while done:
                     camera = Camera(camera_func, lvl_w, lvl_h)
                 else:
                     launch_menu = True
-            if menureturn == 'options':
+            elif menureturn == 'options':
                 menureturn = options.menu(screen, win, current_diff)
                 current_diff = menureturn
                 launch_menu = True
-        if menureturn == 'restart':
+        elif menureturn == 'restart':
             stage = 0
             make_level(stage, 6, 20, current_diff)
             
@@ -245,20 +245,21 @@ while done:
 
     if launch_menu:
         launch_menu = False
-        menureturn = menu.menu(screen, win)  
+        menureturn = menu.menu(screen, win)
         if menureturn == 'exit':
             sys.exit()
-        menureturn = level_choose.menu(screen, win)
-        if menureturn != 'launch menu':
-            stage = menureturn
-            make_level(stage, 6, 20, current_diff)
-            camera = Camera(camera_func, lvl_w, lvl_h)
-        else:
-            launch_menu = True
-        if menureturn == 'options':
+        elif menureturn == 'new game':
+            menureturn = level_choose.menu(screen, win)
+            if menureturn != 'launch menu':
+                stage = menureturn
+                make_level(stage, 6, 20, current_diff)
+                camera = Camera(camera_func, lvl_w, lvl_h)
+            else:
+                launch_menu = True
+        elif menureturn == 'options':
             menureturn = options.menu(screen, win, current_diff)
             current_diff = menureturn
-            launch_menu = True      
+            launch_menu = True   
             
     screen.fill((5, 5, 5))
 
