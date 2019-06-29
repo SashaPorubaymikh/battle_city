@@ -123,13 +123,13 @@ class Camera(object):
         self.state = self.camera_func(self.state, target.rect)
   
 def camera_func(camera, target_rect):
-    l = -target_rect.x + scr_w/2
-    t = -target_rect.y + scr_h/2
+    l = -target_rect.x + 1366/2
+    t = -target_rect.y + 768/2
     w, h = camera.width, camera.height
  
     l = min(0, l)
-    l = max(-(camera.width-scr_w), l)
-    t = max(-(camera.height-scr_h), t)
+    l = max(-(camera.width-1366), l)
+    t = max(-(camera.height-768), t)
     t = min(0, t)
  
     return pygame.Rect(l, t, w, h)
