@@ -301,7 +301,7 @@ while done:
         u_win.menu(screen, win)
         stage += 1
         if stage < len(levels):
-            make_level(stage, 6, 20, current_diff)
+            make_level(stage, 6, 20, current_diff, zoom)
     
 
     if show_controls == True:
