@@ -27,10 +27,9 @@ ANIMATION_DOWN = ['images/tanks/player_down_2.png',
 ]
 
 class Friend(Sprite):
-    def __init__(self, x, y, zoom):
+    def __init__(self, x, y):
         Sprite.__init__(self)
         self.image = Surface((40, 40))
-        self.image = scale(self.image, (40 + 10 * (zoom - 1), 40 + 10 * (zoom - 1)))
         self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
         self.xvel = self.yvel = 0
@@ -38,7 +37,7 @@ class Friend(Sprite):
         self.rect.y = y
         self.ready = False
         self.timer = 0
-        self.MOVE_SPEED = 1 + 0.25 * (zoom - 1)
+        self.MOVE_SPEED = 1
         self.lifes = 3
         self.dir = 'down'
         self.ldir = 'down'
@@ -46,22 +45,22 @@ class Friend(Sprite):
         self.min_x = self.min_y = 100000
         self.type = 'f'
 
-        def make_anim(anim_list, delay, zoom):
+        def make_anim(anim_list, delay):
             boltAnim = []
             for anim in anim_list:
                 boltAnim.append((anim, delay))
-            Anim = pyganim.PygAnimation(boltAnim, zoom)
+            Anim = pyganim.PygAnimation(boltAnim)
             return Anim
 
-        self.AnimStayUp = pyganim.PygAnimation(ANIMATION_STAY_UP, zoom)
-        self.AnimStayRight = pyganim.PygAnimation(ANIMATION_STAY_RIGHT, zoom)
-        self.AnimStayDown = pyganim.PygAnimation(ANIMATION_STAY_DOWN, zoom)
-        self.AnimStayleft = pyganim.PygAnimation(ANIMATION_STAY_LEFT, zoom)
+        self.AnimStayUp = pyganim.PygAnimation(ANIMATION_STAY_UP)
+        self.AnimStayRight = pyganim.PygAnimation(ANIMATION_STAY_RIGHT)
+        self.AnimStayDown = pyganim.PygAnimation(ANIMATION_STAY_DOWN)
+        self.AnimStayleft = pyganim.PygAnimation(ANIMATION_STAY_LEFT)
 
-        self.AnimGoUp = make_anim(ANIMATION_UP, ANIMATION_DELAY, zoom)
-        self.AnimGoRight = make_anim(ANIMATION_RIGHT, ANIMATION_DELAY, zoom)
-        self.AnimGoDown = make_anim(ANIMATION_DOWN, ANIMATION_DELAY, zoom)
-        self.AnimGoLeft = make_anim(ANIMATION_LEFT, ANIMATION_DELAY, zoom)
+        self.AnimGoUp = make_anim(ANIMATION_UP, ANIMATION_DELAY)
+        self.AnimGoRight = make_anim(ANIMATION_RIGHT, ANIMATION_DELAY)
+        self.AnimGoDown = make_anim(ANIMATION_DOWN, ANIMATION_DELAY)
+        self.AnimGoLeft = make_anim(ANIMATION_LEFT, ANIMATION_DELAY)
 
         self.AnimGoDown.play()
         self.AnimGoLeft.play()

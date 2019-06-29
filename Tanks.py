@@ -24,12 +24,11 @@ screen_size = (infos.current_w, infos.current_h)
 scr_w = infos.current_w
 scr_h = infos.current_h
 win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-screen = pygame.Surface((scr_w, scr_h))
+screen = pygame.Surface((1366, 768))
 full_screen = True
 
 #Создание перснaжа
 sprite_group = []
-zoom = 1
 bullets_group = []
 
 #Персонаж, врги и друзья
@@ -61,10 +60,11 @@ levels.append(level1)
 levels.append(level2)
 level_num = 0
 lvl_w = lvl_h = 0
-def make_level(level_num, max_e, total_e, diff, zoom):
+def make_level(level_num, max_e, total_e, diff):
     x = y = 0
     global bricks_group, sprite_group, lvl_w, lvl_h, enemies, \
-        friends, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group
+        friends, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group,\
+            camera
 
     enemy_spavner_group = []
     bullets_group = []
@@ -81,31 +81,33 @@ def make_level(level_num, max_e, total_e, diff, zoom):
     bricks_group = []
     sprite_group = []
     enemies = friends = 0
-    lvl_h = len(levels[level_num]) * (40 + 10 * (zoom - 1))
+    lvl_h = len(levels[level_num]) * 40
     for row in levels[level_num]:
-        lvl_w = len(row) * (40 + 10 * (zoom - 1))
+        lvl_w = len(row) * 40
         for col in row:
             if col == '0':
-                b1 = Blocks(x, y, 'images/blocks/brick.png', 1, zoom)
+                b1 = Blocks(x, y, 'images/blocks/brick.png', 1)
                 bricks_group.append(b1)
                 sprite_group.append(b1)
             if col == '1':
-                b1 = Blocks(x, y, 'images/blocks/experimentalbrick.png', 1000000, zoom)
+                b1 = Blocks(x, y, 'images/blocks/experimentalbrick.png', 1000000)
                 bricks_group.append(b1)
                 sprite_group.append(b1)
             if col == 'e':
                 enemy_spavner_group.append([x, y])
             if col == 'f':
-                sprite_group.append(Friend(x, y, zoom))
+                sprite_group.append(Friend(x, y))
                 friends += 1
             if col == 'p':
-                sprite_group = [Player(x, y, zoom)] + sprite_group
+                sprite_group = [Player(x, y)] + sprite_group
                 friends += 1
             if col == 'b':
-                sprite_group.append(Flag(x, y, zoom))
-            x += 40 + 10 * (zoom - 1)
-        y += 40 + 10 * (zoom - 1)
+                sprite_group.append(Flag(x, y))
+            x += 40
+        y += 40
         x = 0
+
+    camera = Camera(camera_func, lvl_w, lvl_h)
 
 
 #Создание камеры
@@ -152,18 +154,17 @@ done = True
 launch_menu = False
 
 clock = pygame.time.Clock()
-make_level(0, 6, 20, current_diff, zoom)
+make_level(0, 6, 20, current_diff)
 menureturn = menu.menu(screen, win)
 if menureturn == 'exit':
     sys.exit()
 if menureturn == 'options':
     menureturn = options.menu(screen, win, current_diff, 1)
     current_diff = menureturn[0]
-    zoom = menureturn[1]
     launch_menu = True
 if menureturn == 'new game':
-    make_level(0, 6, 20, current_diff, zoom)
-camera = Camera(camera_func, lvl_w, lvl_h)
+    make_level(0, 6, 20, current_diff)
+
 
 pygame.key.set_repeat(10, 10)
 
@@ -180,12 +181,11 @@ while done:
                     if menureturn == 'exit':
                         sys.exit()
                     if menureturn == 'new game':
-                        make_level(0, 6, 20, current_diff, zoom)
+                        make_level(0, 6, 20, current_diff)
                         camera = Camera(camera_func, lvl_w, lvl_h)
                     if menureturn == 'options':
                         menureturn = options.menu(screen, win, current_diff, 1)
-                        current_diff = menureturn[0]
-                        zoom = menureturn[1]
+                        current_diff = menureturn
                         launch_menu = True
                 if menureturn == 'restart':
                     stage = 0
@@ -238,12 +238,11 @@ while done:
         if menureturn == 'exit':
             sys.exit()
         if menureturn == 'new game':
-            make_level(0, 6, 20, current_diff, zoom)
+            make_level(0, 6, 20, current_diff)
             camera = Camera(camera_func, lvl_w, lvl_h)
         if menureturn == 'options':
             menureturn = options.menu(screen, win, current_diff, 1)
-            current_diff = menureturn[0]
-            zoom = menureturn[1]
+            current_diff = menureturn
             launch_menu = True      
             
     screen.fill((5, 5, 5))
@@ -289,7 +288,7 @@ while done:
     if timer.update() == True:
         for i in enemy_spavner_group:
             if enemies < max_enemies and spavned_enemies < total_enemies:
-                sprite_group.append(Enemy(i[0], i[1], current_diff, zoom))
+                sprite_group.append(Enemy(i[0], i[1], current_diff))
                 enemies += 1
                 spavned_enemies += 1
     status_bar.show(sprite_group[0].lifes, friends, total_enemies - spavned_enemies, stage + 1, screen, scr_w)
@@ -301,13 +300,13 @@ while done:
         u_win.menu(screen, win)
         stage += 1
         if stage < len(levels):
-            make_level(stage, 6, 20, current_diff, zoom)
+            make_level(stage, 6, 20, current_diff)
     
 
     if show_controls == True:
         win.blit(control.surface, (0, 0))
 
-    win.blit(screen, (0, 0))
+    win.blit(pygame.transform.scale(screen, (scr_w, scr_h)), (0, 0))
     
     pygame.display.flip()
     

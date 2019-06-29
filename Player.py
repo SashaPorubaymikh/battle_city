@@ -27,10 +27,9 @@ ANIMATION_DOWN = ['images/tanks/player_down_2.png',
 ]
 
 class Player(Sprite):
-    def __init__(self, x, y, zoom):
+    def __init__(self, x, y):
         Sprite.__init__(self)
         self.image = Surface((40, 40))
-        self.image = scale(self.image, (40 + 10 * (zoom - 1), 40 + 10 * (zoom - 1)))
         self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
         self.xvel = self.yvel = 0
@@ -40,7 +39,7 @@ class Player(Sprite):
         self.timer = 0
         self.recharge = Surface((0, 5))
         self.recharge.fill((250, 0, 0))
-        self.MOVE_SPEED = 1 + 0.25 * (zoom - 1)
+        self.MOVE_SPEED = 1
         self.lifes = 3
         self.type = 'f'
         self.isdead = False
@@ -48,33 +47,33 @@ class Player(Sprite):
         self.ldir = 'up'
 
         #Создание анимации
-        def make_boltAnimation(anim_list, delay, zoom):
+        def make_boltAnimation(anim_list, delay):
             boltAnim = []
             for anim in anim_list:
                 boltAnim.append((anim, delay))
-            Anim = pyganim.PygAnimation(boltAnim, zoom)
+            Anim = pyganim.PygAnimation(boltAnim)
             return Anim
         
-        self.boltAnimStayUp = pyganim.PygAnimation(ANIMATION_STAY_UP, zoom)
-        self.boltAnimStayRight = pyganim.PygAnimation(ANIMATION_STAY_RIGHT, zoom)
-        self.boltAnimStayDown = pyganim.PygAnimation(ANIMATION_STAY_DOWN, zoom)
-        self.boltAnimStayLeft = pyganim.PygAnimation(ANIMATION_STAY_LEFT, zoom)
+        self.boltAnimStayUp = pyganim.PygAnimation(ANIMATION_STAY_UP)
+        self.boltAnimStayRight = pyganim.PygAnimation(ANIMATION_STAY_RIGHT)
+        self.boltAnimStayDown = pyganim.PygAnimation(ANIMATION_STAY_DOWN)
+        self.boltAnimStayLeft = pyganim.PygAnimation(ANIMATION_STAY_LEFT)
 
         self.boltAnimStayDown.play()
         self.boltAnimStayLeft.play()
         self.boltAnimStayRight.play()
         self.boltAnimStayUp.play()
 
-        self.boltAnimRight = make_boltAnimation(ANIMATION_RIGHT, ANIMATION_DELAY, zoom)
+        self.boltAnimRight = make_boltAnimation(ANIMATION_RIGHT, ANIMATION_DELAY)
         self.boltAnimRight.play()
 
-        self.boltAnimLeft = make_boltAnimation(ANIMATION_LEFT, ANIMATION_DELAY, zoom)
+        self.boltAnimLeft = make_boltAnimation(ANIMATION_LEFT, ANIMATION_DELAY)
         self.boltAnimLeft.play()
 
-        self.boltAnimUp = make_boltAnimation(ANIMATION_UP, ANIMATION_DELAY, zoom)
+        self.boltAnimUp = make_boltAnimation(ANIMATION_UP, ANIMATION_DELAY)
         self.boltAnimUp.play()
 
-        self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIMATION_DELAY, zoom)
+        self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIMATION_DELAY)
         self.boltAnimDown.play()
 
     def update(self, sprites, screen, friends):
@@ -89,7 +88,6 @@ class Player(Sprite):
             self.ready = True
             self.recharge = Surface((40, 5))
             self.recharge.fill((0, 250, 0))
-        #screen.blit(self.recharge, (self.rect.x, self.rect.y - 10))
         self.yvel = self.xvel = 0
         if self.dir == 'left':
             self.xvel = -self.MOVE_SPEED
