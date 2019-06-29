@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from Levels import level1, level2
+from Levels import levels
 from Blocks import Blocks
 from Player import Player
 from Bullet import Bullet
@@ -11,8 +11,8 @@ from Enemy import Enemy
 from Friend import Friend
 from status_bar import Status_bar
 from timer import Timer
-from menu import Menu, Pause, End_of_game, Options, punkts, punkts1, punkts2, \
-    punkts3, punkts4
+from menu import Menu, Pause, End_of_game, Options, Level_choose, punkts, punkts1, punkts2, \
+    punkts3, punkts4, punkts5
 from flag import Flag
 
 pygame.init()
@@ -25,6 +25,7 @@ scr_w = infos.current_w
 scr_h = infos.current_h
 win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen = pygame.Surface((1366, 768))
+pygame.display.set_icon(pygame.image.load("images/tanks/player_up_1.png"))
 full_screen = True
 
 #Создание перснaжа
@@ -40,6 +41,7 @@ menu = Menu(punkts, "Battle city")
 options = Options(punkts2, 'Options')
 u_win = End_of_game(punkts3, "You win!")
 u_lose = End_of_game(punkts4, 'Game over')
+level_choose = Level_choose(punkts5, 'Choose level')
 current_diff = 0
 
 #Создание строки состояния
@@ -52,12 +54,9 @@ timer = Timer()
 max_enemies = 0
 spavned_enemies = 0
 total_enemies = 0
-levels = []
 stage = 0
 bricks_group = []
 enemy_spavner_group = []
-levels.append(level1)
-levels.append(level2)
 level_num = 0
 lvl_w = lvl_h = 0
 def make_level(level_num, max_e, total_e, diff):
@@ -154,16 +153,22 @@ done = True
 launch_menu = False
 
 clock = pygame.time.Clock()
-make_level(0, 6, 20, current_diff)
+make_level(stage, 6, 20, current_diff)
 menureturn = menu.menu(screen, win)
 if menureturn == 'exit':
     sys.exit()
 if menureturn == 'options':
-    menureturn = options.menu(screen, win, current_diff, 1)
-    current_diff = menureturn[0]
+    menureturn = options.menu(screen, win, current_diff)
+    current_diff = menureturn
     launch_menu = True
 if menureturn == 'new game':
-    make_level(0, 6, 20, current_diff)
+    menureturn = level_choose.menu(screen, win)
+    if menureturn != 'launch menu':
+        stage = menureturn
+        make_level(stage, 6, 20, current_diff)
+        camera = Camera(camera_func, lvl_w, lvl_h)
+    else:
+        launch_menu = True
 
 
 pygame.key.set_repeat(10, 10)
@@ -211,10 +216,15 @@ while done:
             if menureturn == 'exit':
                 sys.exit()
             if menureturn == 'new game':
-                make_level(0, 6, 20, current_diff)
-                camera = Camera(camera_func, lvl_w, lvl_h)
+                menureturn = level_choose.menu(screen, win)
+                if menureturn != 'launch menu':
+                    stage = menureturn
+                    make_level(stage, 6, 20, current_diff)
+                    camera = Camera(camera_func, lvl_w, lvl_h)
+                else:
+                    launch_menu = True
             if menureturn == 'options':
-                menureturn = options.menu(screen, win, current_diff, 1)
+                menureturn = options.menu(screen, win, current_diff)
                 current_diff = menureturn
                 launch_menu = True
         if menureturn == 'restart':
@@ -238,11 +248,15 @@ while done:
         menureturn = menu.menu(screen, win)  
         if menureturn == 'exit':
             sys.exit()
-        if menureturn == 'new game':
-            make_level(0, 6, 20, current_diff)
+        menureturn = level_choose.menu(screen, win)
+        if menureturn != 'launch menu':
+            stage = menureturn
+            make_level(stage, 6, 20, current_diff)
             camera = Camera(camera_func, lvl_w, lvl_h)
+        else:
+            launch_menu = True
         if menureturn == 'options':
-            menureturn = options.menu(screen, win, current_diff, 1)
+            menureturn = options.menu(screen, win, current_diff)
             current_diff = menureturn
             launch_menu = True      
             
