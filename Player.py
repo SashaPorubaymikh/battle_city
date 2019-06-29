@@ -2,7 +2,9 @@ from pygame.sprite import Sprite, collide_rect
 from pygame import image
 from pygame import Surface
 from pygame.transform import scale
+
 import pyganim, sys
+from Boom import Boom
 
 from Bullet import Bullet
 
@@ -39,12 +41,13 @@ class Player(Sprite):
         self.timer = 0
         self.recharge = Surface((0, 5))
         self.recharge.fill((250, 0, 0))
-        self.MOVE_SPEED = 1
+        self.MOVE_SPEED = 2
         self.lifes = 3
         self.type = 'f'
         self.isdead = False
         self.dir = ''
         self.ldir = 'up'
+        self.boom_showed = False
 
         #Создание анимации
         def make_boltAnimation(anim_list, delay):
@@ -76,7 +79,7 @@ class Player(Sprite):
         self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIMATION_DELAY)
         self.boltAnimDown.play()
 
-    def update(self, sprites, screen, friends):
+    def update(self, sprites, screen, friends, boom_group):
         
             
         if not(self.ready):
@@ -139,6 +142,9 @@ class Player(Sprite):
         if self.lifes == 0: 
             #sprites.remove(self)
             self.isdead = True
+            if self.boom_showed == False:
+                boom_group.append(Boom(self.rect.x, self.rect.y, 0))
+                self.boom_showed = True
             return 0
 
 

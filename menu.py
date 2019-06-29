@@ -395,7 +395,7 @@ class Mode_choose:
                                 self.mode = 0
                     if e.key == pygame.K_LEFT:
                         if punkt == 0:
-                            self.ode -= 1
+                            self.mode -= 1
                             if self.mode == -1:
                                 self.mode = len(self.modes) - 1
                 if e.type == pygame.MOUSEBUTTONDOWN:

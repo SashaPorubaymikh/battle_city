@@ -1,4 +1,4 @@
-import sys
+import sys, random
 
 import pygame
 
@@ -31,6 +31,7 @@ full_screen = True
 #Создание перснaжа
 sprite_group = []
 bullets_group = []
+boom_group = []
 
 #Персонаж, врги и друзья
 enemies = friends = 0
@@ -65,10 +66,11 @@ def make_level(level_num, max_e, total_e, diff, mode):
     x = y = 0
     global bricks_group, sprite_group, lvl_w, lvl_h, enemies, \
         friends, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group,\
-            camera
+            camera, bullets_group, boom_group
 
     enemy_spavner_group = []
     bullets_group = []
+    boom_group = []
     timer.timer = 0
     max_enemies = max_e
     if mode == 0:
@@ -244,7 +246,7 @@ while done:
                 launch_menu = True
         elif menureturn == 'restart':
             stage = 0
-            make_level(stage, 6, 20, current_diff)
+            make_level(stage, 6, 20, current_diff, current_mode)
             
         pygame.key.set_repeat(10, 10)
     if keys[pygame.K_LEFT] or keys[pygame.K_a]:
@@ -293,6 +295,9 @@ while done:
             screen.blit(i.image, camera.apply(i))
         else:
             screen.blit(pygame.transform.rotate(i.image, 90), camera.apply(i))
+    for i in boom_group:
+        i.update(boom_group)
+        screen.blit(i.image, camera.apply(i))
 
     #Обновление персонажей
     if len(sprite_group) > 0:
@@ -301,18 +306,18 @@ while done:
         i.update(i.dir, screen, sprite_group, bullets_group, lvl_w, lvl_h)
     for i in reversed(sprite_group):
         if isinstance(i, Enemy):
-            if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h) == 0:
+            if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h, boom_group) == 0:
                 enemies -= 1
             screen.blit(i.image, camera.apply(i))
         if isinstance(i, Player) and i.isdead == False:
-            if i.update(sprite_group, screen, friends) == 0:
+            if i.update(sprite_group, screen, friends, boom_group) == 0:
                 friends -= 1
             screen.blit(i.image, camera.apply(i))
             screen.blit(i.recharge, (camera.apply(i)[0], camera.apply(i)[1] - 10))
         elif isinstance(i, Player) and i.isdead == True:
             i.rect.x = i.rect.y = -40
         if isinstance(i, Friend):
-            if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h) == 0:
+            if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h, boom_group) == 0:
                 friends -= 1
             screen.blit(i.image, camera.apply(i))
         if isinstance(i, Flag):
@@ -322,6 +327,7 @@ while done:
             else:
                 screen.blit(i.image, (camera.apply(i)[0], camera.apply(i)[1]))
     if timer.update() == True:
+        random.shuffle(enemy_spavner_group)
         for i in enemy_spavner_group:
             if enemies < max_enemies and (spavned_enemies < total_enemies or current_mode == 1):
                 sprite_group.append(Enemy(i[0], i[1], current_diff))
@@ -340,7 +346,7 @@ while done:
         u_win.menu(screen, win)
         stage += 1
         if stage < len(levels):
-            make_level(stage, 6, 20, current_diff)
+            make_level(stage, 6, 20, current_diff, current_mode)
     
 
     if show_controls == True:

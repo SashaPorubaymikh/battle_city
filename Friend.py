@@ -3,6 +3,8 @@ from pygame import Surface
 from pygame.transform import scale
 
 from Bullet import Bullet
+from Boom import Boom
+
 import pyganim
 import random
 
@@ -37,13 +39,14 @@ class Friend(Sprite):
         self.rect.y = y
         self.ready = False
         self.timer = 0
-        self.MOVE_SPEED = 1
+        self.MOVE_SPEED = 2
         self.lifes = 3
         self.dir = 'down'
         self.ldir = 'down'
         self.dirs = ['up', 'down', 'left', 'right']
         self.min_x = self.min_y = 100000
         self.type = 'f'
+        self.boom_showed = False
 
         def make_anim(anim_list, delay):
             boltAnim = []
@@ -71,7 +74,7 @@ class Friend(Sprite):
         self.AnimStayRight.play()
         self.AnimStayUp.play()
 
-    def update(self, sprites, enemies, friends, bullets_group, lvl_w, lvl_h):
+    def update(self, sprites, enemies, friends, bullets_group, lvl_w, lvl_h, boom_group):
 
         if self.ready == False:
             self.timer += 1
@@ -108,7 +111,8 @@ class Friend(Sprite):
             random.shuffle(self.dirs)
             self.dir = self.ldir = self.dirs[0]
         if self.lifes == 0:
-            sprites.remove(self)   
+            sprites.remove(self)  
+            boom_group.append(Boom(self.rect.x, self.rect.y, 0)) 
             return 0
         if enemies == 0: self.dir = ''
         if enemies != 0 and self.dir == '':
