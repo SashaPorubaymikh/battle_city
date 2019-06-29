@@ -31,7 +31,7 @@ class Menu:
                 if mp[0]>i[0] and mp[0]<i[0]+i[6] and mp[1]>i[1] and mp[1]<i[1]+50:
                     punkt = i[5]
             self.render(screen, self.font_menu, punkt)
-            screen.blit(self.font_title.render(self.title, 1, (255, 255, 255)), (scr_w // 2 - self.font_title.size(self.title)[0] // 2, 100))
+            screen.blit(self.font_title.render(self.title, 1, (255, 255, 255)), (1366 // 2 - self.font_title.size(self.title)[0] // 2, 100))
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     sys.exit()
@@ -65,8 +65,7 @@ class Menu:
                     if punkt == 2:
                         return 'exit'
 
-            #window.blit(pygame.transform.scale(screen, (scr_w, scr_h)), (0, 0))
-            window.blit(screen, (0, 0))
+            window.blit(pygame.transform.scale(screen, (scr_w, scr_h)), (0, 0))
             pygame.display.flip()
 
 class Pause:
@@ -94,7 +93,7 @@ class Pause:
                 if mp[0]>i[0] and mp[0]<i[0]+i[6] and mp[1]>i[1] and mp[1]<i[1]+50:
                     punkt = i[5]
             self.render(screen, self.font_menu, punkt)
-            screen.blit(self.font_title.render(self.title, 1, (255, 255, 255)), (scr_w // 2 - self.font_title.size(self.title)[0] // 2, 100))
+            screen.blit(self.font_title.render(self.title, 1, (255, 255, 255)), (1366 // 2 - self.font_title.size(self.title)[0] // 2, 100))
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     sys.exit()
@@ -166,7 +165,7 @@ class Options:
                 if mp[0]>i[0] and mp[0]<i[0]+i[6] and mp[1]>i[1] and mp[1]<i[1]+50:
                     punkt = i[5]
             self.render(screen, self.font_menu, punkt)
-            screen.blit(self.font_title.render(self.title, 1, (255, 255, 255)), (scr_w // 2 - self.font_title.size(self.title)[0] // 2, 100))
+            screen.blit(self.font_title.render(self.title, 1, (255, 255, 255)), (1366 // 2 - self.font_title.size(self.title)[0] // 2, 100))
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     sys.exit()
@@ -229,7 +228,7 @@ class End_of_game:
                 if mp[0]>i[0] and mp[0]<i[0]+i[6] and mp[1]>i[1] and mp[1]<i[1]+50:
                     punkt = i[5]
             self.render(screen, self.font_menu, punkt)
-            screen.blit(self.font_title.render(self.title, 1, (255, 255, 255)), (scr_w // 2 - self.font_title.size(self.title)[0] // 2, 100))
+            screen.blit(self.font_title.render(self.title, 1, (255, 255, 255)), (1366 // 2 - self.font_title.size(self.title)[0] // 2, 100))
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     sys.exit()
@@ -257,24 +256,24 @@ class End_of_game:
             pygame.display.flip()
 
 punkts = [
-    (90, scr_h - 368, u'New Game', (30, 30, 30), (252, 102, 12), 0, 450),
-    (90, scr_h - 268, u'Options', (30, 30, 30), (252, 102, 12), 1, 450),
-    (90, scr_h - 168, u'Quit Game', (30, 30, 30), (252, 102, 12), 2, 450)
+    (90, 768 - 368, u'New Game', (30, 30, 30), (252, 102, 12), 0, 450),
+    (90, 768 - 268, u'Options', (30, 30, 30), (252, 102, 12), 1, 450),
+    (90, 768 - 168, u'Quit Game', (30, 30, 30), (252, 102, 12), 2, 450)
 ]
 
 punkts1 = [
-    (90, scr_h - 368, u'Resume', (30, 30, 30), (252, 102, 12), 0, 450),
-    (90, scr_h - 268, u'Restart', (30, 30, 30), (252, 102, 12), 1, 450),
-    (90, scr_h - 168, u'Main menu', (30, 30, 30), (252, 102, 12), 2, 450)
+    (90, 768 - 368, u'Resume', (30, 30, 30), (252, 102, 12), 0, 450),
+    (90, 768 - 268, u'Restart', (30, 30, 30), (252, 102, 12), 1, 450),
+    (90, 768 - 168, u'Main menu', (30, 30, 30), (252, 102, 12), 2, 450)
 ]
     
 punkts2 = [
-    (90, scr_h - 268, u'Difficulty: ', (30, 30, 30), (252, 102, 12), 0, 450),
-    (90, scr_h - 168, u'Back ', (30, 30, 30), (252, 102, 12), 1, 450)
+    (90, 768 - 268, u'Difficulty: ', (30, 30, 30), (252, 102, 12), 0, 450),
+    (90, 768 - 168, u'Back ', (30, 30, 30), (252, 102, 12), 1, 450)
 ]
 punkts3 = [
-    (scr_w // 2 - 225, 250, u'Next level', (255, 255, 255), (252, 102, 12), 0, 450)
+    (1366 // 2 - 225, 250, u'Next level', (255, 255, 255), (252, 102, 12), 0, 450)
 ]
 punkts4 = [
-    (scr_w // 2 - 225, 250, u'Main menu', (255, 255, 255), (252, 102, 12), 0, 450)
+    (1366 // 2 - 225, 250, u'Main menu', (255, 255, 255), (252, 102, 12), 0, 450)
 ]
