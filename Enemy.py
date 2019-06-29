@@ -37,7 +37,7 @@ class Enemy(Sprite):
         self.timer = 0
         self.MOVE_SPEED = 1
         if diff == 2:
-            self.MOVE_SPEED += 2
+            self.MOVE_SPEED = 3
         self.lifes = 1
         if diff == 2:
             self.lifes = 2

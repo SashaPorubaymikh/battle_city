@@ -20,7 +20,7 @@ class Menu:
                 surface.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
     def menu(self, screen, window):
         done = True
-        pygame.key.set_repeat(1, 100)
+        pygame.key.set_repeat(1, 500)
         pygame.mouse.set_visible(True)
         punkt = 0
         while done:
@@ -82,7 +82,7 @@ class Pause:
                 surface.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
     def menu(self, screen, window):
         done = True
-        pygame.key.set_repeat(1, 100)
+        pygame.key.set_repeat(1, 500)
         pygame.mouse.set_visible(True)
         punkt = 0
         while done:
@@ -153,7 +153,7 @@ class Options:
                     surface.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
     def menu(self, screen, window, dif_punkt, zoom):
         done = True
-        pygame.key.set_repeat(1, 100)
+        pygame.key.set_repeat(1, 500)
         pygame.mouse.set_visible(True)
         punkt = 0
         self.dif_punkt = dif_punkt
@@ -217,7 +217,7 @@ class End_of_game:
                 surface.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
     def menu(self, screen, window):
         done = True
-        pygame.key.set_repeat(1, 100)
+        pygame.key.set_repeat(1, 500)
         pygame.mouse.set_visible(True)
         punkt = 0
         while done:
