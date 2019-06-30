@@ -57,7 +57,8 @@ class PygAnimation(object):
                 assert type(frame[0]) in (str, pygame.Surface), 'Frame %s image must be a string filename or a pygame.Surface' % (i)
                 assert frame[1] > 0, 'Frame %s duration must be greater than zero.' % (i)
                 if type(frame[0]) == str:
-                    frame = (pygame.image.load(frame[0]), frame[1])
+                    tmp_image = pygame.image.load(frame[0])
+                    frame = (tmp_image, frame[1])
                 self._images.append(frame[0])
                 self._durations.append(frame[1])
             self._startTimes = self._getStartTimes()

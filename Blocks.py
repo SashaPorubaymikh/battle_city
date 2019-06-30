@@ -1,5 +1,6 @@
 from pygame.sprite import Sprite
 from pygame.image import load
+from pygame.transform import scale
 
 class Blocks(Sprite):
     def __init__(self, x, y, image, lifes):
@@ -9,6 +10,7 @@ class Blocks(Sprite):
         self.rect.x = x
         self.rect.y = y
         self.lifes = lifes
+        self.type = 'block'
     def update(self, group, group2):
         if self.lifes == 0:
             group.remove(self)
