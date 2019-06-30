@@ -114,7 +114,7 @@ class Friend(Sprite):
             sprites.remove(self)  
             boom_group.append(Boom(self.rect.x, self.rect.y, 0)) 
             return 0
-        if enemies == 0: self.dir = ''
+        #if enemies == 0: self.dir = ''
         if enemies != 0 and self.dir == '':
             random.shuffle(self.dirs)
             self.dir = self.dirs[0]

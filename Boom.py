@@ -3,7 +3,7 @@ from pygame import Surface
 
 import pyganim
 
-ANIMATION_DELAY = 0.15
+ANIMATION_DELAY = 0.05
 boom_anim = [
     ('images/boom/boom_1.png', ANIMATION_DELAY),
     ('images/boom/boom_2.png', ANIMATION_DELAY),

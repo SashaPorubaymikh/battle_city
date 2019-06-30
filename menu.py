@@ -337,7 +337,7 @@ class Mode_choose:
         self.title = title
         self.font_menu = pygame.font.Font('fonts/ComicTalecopy.ttf', 100)
         self.font_title = pygame.font.Font('fonts/ComicTalecopy.ttf', 150)
-        self.modes = ['Standart mode', 'Endless mode']
+        self.modes = ['Standard mode', 'Endless mode', 'Bomb defusion mode']
         self.mode = 0
         self.stage = 0
     def render(self, surface, font, num_punkt):
