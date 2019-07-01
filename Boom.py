@@ -3,7 +3,7 @@ from pygame import Surface
 
 import pyganim
 
-ANIMATION_DELAY = 0.15
+ANIMATION_DELAY = 0.1
 boom_anim = [
     ('images/boom/boom_1.png', ANIMATION_DELAY),
     ('images/boom/boom_2.png', ANIMATION_DELAY),
@@ -41,6 +41,7 @@ class Boom():
         self.rect.y = y
 
     def update(self, boom_group):
+        self.image.fill((0, 0, 0))
         self.anim.blit(self.image, (0, 0))
         self.timer += 1
         if self.timer == 26:
