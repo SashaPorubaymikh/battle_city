@@ -52,5 +52,5 @@ class Boom():
         self.image.fill((0, 0, 0))
         self.anim.blit(self.image, (0, 0))
         self.timer += 1
-        if (self.timer == 26 and self.num == 0) or (self.timer == 208):
+        if (self.timer == 18 and self.num == 0) or (self.timer == 40):
             boom_group.remove(self)

@@ -12,6 +12,6 @@ class New_timer:
         self.time = 0
     def update(self):
         self.time += 1
-        if self.time == 215:
+        if self.time == 50:
             return True
             self.time = 0
