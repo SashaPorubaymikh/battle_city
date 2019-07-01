@@ -12,7 +12,7 @@ class Dynamite(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.lifes = 1
+        self.lifes = 5
         self.type = 'bomb'
         self.timer = 2400
         self.boom_append = False

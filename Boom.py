@@ -3,8 +3,8 @@ from pygame import Surface
 
 import pyganim
 
-ANIMATION_DELAY = 0.1
-ANIMATION_DELAY_1 = 0.8
+ANIMATION_DELAY = 0.07
+ANIMATION_DELAY_1 = 0.15
 boom_anim = [
     ('images/boom/boom_1.png', ANIMATION_DELAY),
     ('images/boom/boom_2.png', ANIMATION_DELAY),
@@ -22,6 +22,9 @@ boom_anim_1 = [
     ('images/boom/boom_5.1.png', ANIMATION_DELAY_1),
     ('images/boom/boom_6.1.png', ANIMATION_DELAY_1),
     ('images/boom/boom_7.1.png', ANIMATION_DELAY_1),
+    ('images/boom/boom_8.1.png', ANIMATION_DELAY_1),
+    ('images/boom/boom_9.1.png', ANIMATION_DELAY_1),
+    ('images/boom/boom_10.1.png', ANIMATION_DELAY_1),
 ]
 
 class Boom():
@@ -31,7 +34,7 @@ class Boom():
             self.image = Surface((60, 60))
             self.anim = pyganim.PygAnimation(boom_anim)
         else:
-            self.image = Surface((260, 260))
+            self.image = Surface((700, 700))
             self.anim = pyganim.PygAnimation(boom_anim_1)
         self.rect = self.image.get_rect()
         
@@ -39,8 +42,8 @@ class Boom():
         self.anim.play()
         self.timer = 0
         if self.num == 1:
-            self.rect.x = x - 110
-            self.rect.y = y - 110
+            self.rect.x = x - 330
+            self.rect.y = y - 330
         else:
             self.rect.x = x - 10
             self.rect.y = y - 10
