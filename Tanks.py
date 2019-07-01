@@ -340,7 +340,7 @@ while done:
                 if stage < len(levels):
                     make_level(stage, current_diff, current_mode)
             elif bomb_return == 'u lose':
-                if bomb_boom_timer.update == 200:
+                if bomb_boom_timer.update() == True:
                     u_lose.menu(screen, win)
                     launch_menu = true
             else:
@@ -354,7 +354,7 @@ while done:
     if timer.update() == True:
         random.shuffle(enemy_spavner_group)
         for i in enemy_spavner_group:
-            if enemies < max_enemies and (spavned_enemies < total_enemies or current_mode == 2):
+            if enemies < max_enemies and (spavned_enemies < total_enemies or current_mode == 2 or current_mode == 1):
                 sprite_group.append(Enemy(i[0], i[1], current_diff))
                 enemies += 1
                 spavned_enemies += 1

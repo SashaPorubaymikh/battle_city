@@ -4,6 +4,7 @@ from pygame import Surface
 import pyganim
 
 ANIMATION_DELAY = 0.1
+ANIMATION_DELAY_1 = 0.8
 boom_anim = [
     ('images/boom/boom_1.png', ANIMATION_DELAY),
     ('images/boom/boom_2.png', ANIMATION_DELAY),
@@ -14,13 +15,13 @@ boom_anim = [
     ('images/boom/boom_7.png', ANIMATION_DELAY),
 ]
 boom_anim_1 = [
-    ('images/boom/boom_1.1.png', ANIMATION_DELAY),
-    ('images/boom/boom_2.1.png', ANIMATION_DELAY),
-    ('images/boom/boom_3.1.png', ANIMATION_DELAY),
-    ('images/boom/boom_4.1.png', ANIMATION_DELAY),
-    ('images/boom/boom_5.1.png', ANIMATION_DELAY),
-    ('images/boom/boom_6.1.png', ANIMATION_DELAY),
-    ('images/boom/boom_7.1.png', ANIMATION_DELAY),
+    ('images/boom/boom_1.1.png', ANIMATION_DELAY_1),
+    ('images/boom/boom_2.1.png', ANIMATION_DELAY_1),
+    ('images/boom/boom_3.1.png', ANIMATION_DELAY_1),
+    ('images/boom/boom_4.1.png', ANIMATION_DELAY_1),
+    ('images/boom/boom_5.1.png', ANIMATION_DELAY_1),
+    ('images/boom/boom_6.1.png', ANIMATION_DELAY_1),
+    ('images/boom/boom_7.1.png', ANIMATION_DELAY_1),
 ]
 
 class Boom():
@@ -37,12 +38,16 @@ class Boom():
         self.image.set_colorkey((0, 0, 0))
         self.anim.play()
         self.timer = 0
-        self.rect.x = x
-        self.rect.y = y
+        if self.num == 1:
+            self.rect.x = x - 110
+            self.rect.y = y - 110
+        else:
+            self.rect.x = x - 10
+            self.rect.y = y - 10
 
     def update(self, boom_group):
         self.image.fill((0, 0, 0))
         self.anim.blit(self.image, (0, 0))
         self.timer += 1
-        if self.timer == 26:
+        if (self.timer == 26 and self.num == 0) or (self.timer == 208):
             boom_group.remove(self)

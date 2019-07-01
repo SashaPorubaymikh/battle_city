@@ -15,12 +15,15 @@ class Dynamite(Sprite):
         self.lifes = 1
         self.type = 'bomb'
         self.timer = 2400
+        self.boom_append = False
     def update(self, group, boom_group):
         if self.lifes == 0:
             group.remove(self)
             return "u win"
         self.timer -= 1
-        if self.timer == 0:
-            group.remove(self)
-            boom_group.append(Boom(self.rect.x, self.rect.y, 1))
+        if self.timer <= 0:
+            #group.remove(self)
+            if self.boom_append == False:
+                boom_group.append(Boom(self.rect.x, self.rect.y, 1))
+                self.boom_append = True
             return 'u lose'
