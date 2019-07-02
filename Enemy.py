@@ -2,6 +2,7 @@ from pygame.sprite import Sprite, collide_rect, Rect
 from pygame import Surface
 from Bullet import Bullet
 from Boom import Boom
+from dead import Dead
 
 import pyganim
 import random
@@ -75,7 +76,7 @@ class Enemy(Sprite):
         self.AnimStayRight.play()
         self.AnimStayUp.play()
 
-    def update(self, sprites, friends, enemies, bullets_group, lvl_w, lvl_h, boom_group):
+    def update(self, sprites, friends, enemies, bullets_group, lvl_w, lvl_h, boom_group, deads):
 
         if self.ready == False:
             self.timer += 1
@@ -111,9 +112,10 @@ class Enemy(Sprite):
         if self.collide(0, self.yvel, sprites):
             random.shuffle(self.dirs)
             self.dir = self.ldir = self.dirs[0]
-        if self.lifes == 0:  
+        if self.lifes == 0:
             sprites.remove(self)   
             boom_group.append(Boom(self.rect.x, self.rect.y, 0))
+            deads.append(Dead(self.rect.x, self.rect.y, 2, self.ldir))
             return 0
         if friends == 0: 
             self.dir = ''
@@ -123,10 +125,9 @@ class Enemy(Sprite):
 
     def collide(self, xvel, yvel, sprites):
         for pl in sprites:
-            if collide_rect(self, pl) and pl != self:
+            if collide_rect(self, pl) and pl != self and isinstance(pl, Dead) == False:
                 if xvel > 0:
                     self.rect.right = pl.rect.left
-
                 if xvel < 0:
                     self.rect.left = pl.rect.right
                 if yvel > 0:

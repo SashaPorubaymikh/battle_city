@@ -5,6 +5,7 @@ from pygame.transform import scale
 
 import pyganim, sys
 from Boom import Boom
+from dead import Dead
 
 from Bullet import Bullet
 
@@ -155,7 +156,7 @@ class Player(Sprite):
 
     def collide(self, xvel, yvel, sprites):
         for pl in sprites:
-            if collide_rect(self, pl) and pl != self:
+            if collide_rect(self, pl) and pl != self and isinstance(pl, Dead) == False:
                 if xvel > 0:
                     self.rect.right = pl.rect.left
                 if xvel < 0:

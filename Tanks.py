@@ -2,6 +2,7 @@ import sys, random
 
 import pygame
 
+from dead import Dead
 from Levels import levels
 from Blocks import Blocks
 from Player import Player
@@ -33,6 +34,7 @@ full_screen = True
 sprite_group = []
 bullets_group = []
 boom_group = []
+dead_group = []
 
 #Персонаж, вргаги и друзья
                     
@@ -72,11 +74,12 @@ def make_level(level_num, diff, mode):
     x = y = 0
     global bricks_group, sprite_group, lvl_w, lvl_h, enemies, \
         friends, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group,\
-            camera, bullets_group, boom_group, player_spavn
+            camera, bullets_group, boom_group, player_spavn, dead_group
 
     enemy_spavner_group = []
     bullets_group = []
     boom_group = []
+    dead_group = []
     timer.timer = 0
     max_enemies = 6
     if mode == 1:
@@ -312,14 +315,19 @@ while done:
         camera.update(sprite_group[0])
     for i in bullets_group:
         i.update(i.dir, screen, sprite_group, bullets_group, lvl_w, lvl_h)
+    for i in dead_group:
+        i.update(sprite_group)
+        screen.blit(i.image, camera.apply(i))
     for i in reversed(sprite_group):
         if isinstance(i, Enemy):
-            if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h, boom_group) == 0:
+            if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h, boom_group, dead_group) == 0:
                 enemies -= 1
+                dead_group.append(Dead(i.rect.x, i.rect.y, 2, i.ldir))
             screen.blit(i.image, camera.apply(i))
         if isinstance(i, Player) and i.isdead == False:
             if i.update(sprite_group, screen, friends, boom_group, player_spavn) == 0:
                 friends -= 1
+                dead_group.append(Dead(i.rect.x, i.rect.y, 1, i.ldir))
             screen.blit(i.image, camera.apply(i))
             screen.blit(i.recharge, (camera.apply(i)[0], camera.apply(i)[1] - 10))
         elif isinstance(i, Player) and i.isdead == True:
