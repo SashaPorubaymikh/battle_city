@@ -67,11 +67,12 @@ bricks_group = []
 enemy_spavner_group = []
 level_num = 0
 lvl_w = lvl_h = 0
+player_spavn = []
 def make_level(level_num, diff, mode):
     x = y = 0
     global bricks_group, sprite_group, lvl_w, lvl_h, enemies, \
         friends, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group,\
-            camera, bullets_group, boom_group
+            camera, bullets_group, boom_group, player_spavn
 
     enemy_spavner_group = []
     bullets_group = []
@@ -114,6 +115,7 @@ def make_level(level_num, diff, mode):
             if col == 'p':
                 sprite_group = [Player(x, y)] + sprite_group
                 friends += 1
+                player_spavn = [x, y]
             if col == 'b' and mode == 0:
                 sprite_group.append(Flag(x, y))
             if col == 'd' and mode == 1:
@@ -316,7 +318,7 @@ while done:
                 enemies -= 1
             screen.blit(i.image, camera.apply(i))
         if isinstance(i, Player) and i.isdead == False:
-            if i.update(sprite_group, screen, friends, boom_group) == 0:
+            if i.update(sprite_group, screen, friends, boom_group, player_spavn) == 0:
                 friends -= 1
             screen.blit(i.image, camera.apply(i))
             screen.blit(i.recharge, (camera.apply(i)[0], camera.apply(i)[1] - 10))

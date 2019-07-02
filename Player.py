@@ -43,6 +43,7 @@ class Player(Sprite):
         self.recharge.fill((250, 0, 0))
         self.MOVE_SPEED = 2
         self.lifes = 3
+        self.llifes = 3
         self.type = 'f'
         self.isdead = False
         self.dir = ''
@@ -79,7 +80,7 @@ class Player(Sprite):
         self.boltAnimDown = make_boltAnimation(ANIMATION_DOWN, ANIMATION_DELAY)
         self.boltAnimDown.play()
 
-    def update(self, sprites, screen, friends, boom_group):
+    def update(self, sprites, screen, friends, boom_group, player_spavn):
         
             
         if not(self.ready):
@@ -146,6 +147,10 @@ class Player(Sprite):
                 boom_group.append(Boom(self.rect.x, self.rect.y, 0))
                 self.boom_showed = True
             return 0
+        if self.llifes > self.lifes:
+            self.rect.x = player_spavn[0]
+            self.rect.y = player_spavn[1]
+            self.llifes = self.lifes
 
 
     def collide(self, xvel, yvel, sprites):
