@@ -48,4 +48,3 @@ class Dead(Sprite):
                     self.rect.bottom = pl.rect.top
                 if pl.rect.y - self.rect.y <= 35 and abs(pl.rect.x - self.rect.x) <= 35:
                     self.rect.top = pl.rect.bottom
-        
