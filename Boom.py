@@ -48,9 +48,9 @@ class Boom():
             self.rect.x = x - 10
             self.rect.y = y - 10
 
-    def update(self, boom_group):
+    def update(self, boom_group, fps):
         self.image.fill((0, 0, 0))
         self.anim.blit(self.image, (0, 0))
         self.timer += 1
-        if (self.timer == 18 and self.num == 0) or (self.timer == 40):
+        if (self.timer == round(fps / 40 * 10) and self.num == 0) or (self.timer == round(fps / 40 * 40)):
             boom_group.remove(self)

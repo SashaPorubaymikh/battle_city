@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['Tanks.py'],
+a = Analysis(['Tanks.py', 'Blocks.py', 'Boom.py', 'Bullet.py', 'Controls.py', 'dead.py', 'Dynamite.py', 'Enemy.py', 'flag.py', 'Friend.py', 'Levels.py', 'menu.py', 'Player.py', 'pyganim.py', 'status_bar.py', 'timer.py'],
              pathex=['/home/llemoon/PYTHON/Battle_city'],
              binaries=[],
              datas=[],

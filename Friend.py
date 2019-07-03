@@ -75,7 +75,7 @@ class Friend(Sprite):
         self.AnimStayRight.play()
         self.AnimStayUp.play()
 
-    def update(self, sprites, enemies, friends, bullets_group, lvl_w, lvl_h, boom_group):
+    def update(self, sprites, enemies, friends, bullets_group, lvl_w, lvl_h, boom_group, deads):
 
         if self.ready == False:
             self.timer += 1
@@ -114,6 +114,7 @@ class Friend(Sprite):
         if self.lifes == 0:
             sprites.remove(self)  
             boom_group.append(Boom(self.rect.x, self.rect.y, 0)) 
+            deads.append(Dead(self.rect.x, self.rect.y, 1, self.ldir))
             return 0
         if enemies == 0: self.dir = ''
         if enemies != 0 and self.dir == '':

@@ -316,7 +316,7 @@ while done:
     for i in bullets_group:
         i.update(i.dir, screen, sprite_group, bullets_group, lvl_w, lvl_h)
     for i in dead_group:
-        i.update(sprite_group)
+        i.update(sprite_group, bricks_group)
         screen.blit(i.image, camera.apply(i))
     for i in reversed(sprite_group):
         if isinstance(i, Enemy):
@@ -333,7 +333,7 @@ while done:
         elif isinstance(i, Player) and i.isdead == True:
             i.rect.x = i.rect.y = -40
         if isinstance(i, Friend):
-            if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h, boom_group) == 0:
+            if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h, boom_group, dead_group) == 0:
                 friends -= 1
             screen.blit(i.image, camera.apply(i))
         if isinstance(i, Flag):
@@ -356,7 +356,7 @@ while done:
             else:
                 screen.blit(i.image, camera.apply(i))
     for i in boom_group:
-        i.update(boom_group)
+        i.update(boom_group, clock.get_fps())
         screen.blit(i.image, camera.apply(i))
 
             
