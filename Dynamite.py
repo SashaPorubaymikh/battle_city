@@ -2,7 +2,7 @@ from pygame import Surface
 from pygame.image import load
 from pygame.sprite import Sprite
 
-from Boom import Boom
+from blast import Boom
 
 class Dynamite(Sprite):
     def __init__(self, x, y):
