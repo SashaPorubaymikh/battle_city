@@ -107,36 +107,23 @@ class Player(Sprite):
             self.yvel = self.MOVE_SPEED
             self.boltAnimDown.blit(self.image, (0, 0))
         elif self.ldir == 'left' and self.dir == '':
-            if self.rect.x % 10 != 0:
-                self.xvel = -self.MOVE_SPEED
-            else:
-                self.xvel = 0
-            self.yvel = 0
-            
+            self.xvel = 0
+            self.yvel = 0       
             self.boltAnimStayLeft.blit(self.image, (0, 0))
         elif self.ldir == 'right' and self.dir == '':
-            if self.rect.x % 10 != 0:
-                self.xvel = +self.MOVE_SPEED
-            else:
-                self.xvel = 0
+            self.xvel = 0
             self.yvel = 0
             self.boltAnimStayRight.blit(self.image, (0, 0))
         elif self.ldir == 'down' and self.dir == '':
-            if self.rect.y % 10 != 0:
-                self.yvel = +self.MOVE_SPEED
-            else:
-                self.yvel = 0
+            self.yvel = 0
             self.xvel = 0
             self.boltAnimStayDown.blit(self.image, (0, 0))
         if self.ldir == 'up' and self.dir == '':
-            if self.rect.y % 10 != 0:
-                self.yvel = -self.MOVE_SPEED
-            else:
-                self.yvel = 0
+            self.yvel = 0
             self.xvel = 0
             self.boltAnimStayUp.blit(self.image, (0, 0))
         
-
+        self.MOVE_SPEED = 2
         self.rect.x += self.xvel
         self.collide(self.xvel, 0, sprites)
         self.rect.y += self.yvel
@@ -148,15 +135,28 @@ class Player(Sprite):
                 boom_group.append(Boom(self.rect.x, self.rect.y, 0))
                 self.boom_showed = True
             return 0
-        if self.llifes > self.lifes:
-            self.rect.x = player_spavn[0]
-            self.rect.y = player_spavn[1]
-            self.llifes = self.lifes
+        # if self.llifes > self.lifes:
+        #     self.rect.x = player_spavn[0]
+        #     self.rect.y = player_spavn[1]
+        #     self.llifes = self.lifes
+        
 
 
     def collide(self, xvel, yvel, sprites):
         for pl in sprites:
             if collide_rect(self, pl) and pl != self:
+                if isinstance(pl, Dead):
+                    pl.rect.x += xvel
+                    pl.rect.y += yvel
+                    if xvel == 0 and yvel == 0:
+                        if self.ldir == 'up':
+                            self.rect.top = pl.rect.bottom
+                        if self.ldir == 'down':
+                            self.rect.bottom = pl.rect.top
+                        if self.ldir == 'right':
+                            self.rect.right = pl.rect.left
+                        if self.ldir == 'left':
+                            self.rect.left = pl.rect.right
                 if xvel > 0:
                     self.rect.right = pl.rect.left
                 if xvel < 0:

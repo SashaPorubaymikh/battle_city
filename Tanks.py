@@ -65,21 +65,19 @@ max_enemies = 0
 spavned_enemies = 0
 total_enemies = 0
 stage = 0
-bricks_group = []
 enemy_spavner_group = []
 level_num = 0
 lvl_w = lvl_h = 0
 player_spavn = []
 def make_level(level_num, diff, mode):
     x = y = 0
-    global bricks_group, sprite_group, lvl_w, lvl_h, enemies, \
+    global sprite_group, lvl_w, lvl_h, enemies, \
         friends, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group,\
-            camera, bullets_group, boom_group, player_spavn, dead_group
+            camera, bullets_group, boom_group, player_spavn
 
     enemy_spavner_group = []
     bullets_group = []
     boom_group = []
-    dead_group = []
     timer.timer = 0
     max_enemies = 6
     if mode == 1:
@@ -104,11 +102,9 @@ def make_level(level_num, diff, mode):
         for col in row:
             if col == '0':
                 b1 = Blocks(x, y, 'images/blocks/brick.png', 1)
-                bricks_group.append(b1)
                 sprite_group.append(b1)
             if col == '1':
                 b1 = Blocks(x, y, 'images/blocks/experimentalbrick.png', 1000000)
-                bricks_group.append(b1)
                 sprite_group.append(b1)
             if col == 'e':
                 enemy_spavner_group.append([x, y])
@@ -300,10 +296,6 @@ while done:
     screen.fill((5, 5, 5))
 
     #отрисовка объектов
-    for i in bricks_group:
-        i.update(bricks_group, sprite_group)
-    for i in bricks_group:
-        screen.blit(i.image, camera.apply(i))
     for i in bullets_group:
         if i.dir == 'up' or i.dir == 'down':
             screen.blit(i.image, camera.apply(i))
@@ -315,25 +307,20 @@ while done:
         camera.update(sprite_group[0])
     for i in bullets_group:
         i.update(i.dir, screen, sprite_group, bullets_group, lvl_w, lvl_h)
-    for i in dead_group:
-        i.update(sprite_group, bricks_group)
-        screen.blit(i.image, camera.apply(i))
     for i in reversed(sprite_group):
         if isinstance(i, Enemy):
-            if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h, boom_group, dead_group) == 0:
+            if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h, boom_group, sprite_group) == 0:
                 enemies -= 1
-                dead_group.append(Dead(i.rect.x, i.rect.y, 2, i.ldir))
             screen.blit(i.image, camera.apply(i))
         if isinstance(i, Player) and i.isdead == False:
             if i.update(sprite_group, screen, friends, boom_group, player_spavn) == 0:
                 friends -= 1
-                dead_group.append(Dead(i.rect.x, i.rect.y, 1, i.ldir))
             screen.blit(i.image, camera.apply(i))
             screen.blit(i.recharge, (camera.apply(i)[0], camera.apply(i)[1] - 10))
         elif isinstance(i, Player) and i.isdead == True:
             i.rect.x = i.rect.y = -40
         if isinstance(i, Friend):
-            if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h, boom_group, dead_group) == 0:
+            if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h, boom_group, sprite_group) == 0:
                 friends -= 1
             screen.blit(i.image, camera.apply(i))
         if isinstance(i, Flag):
@@ -355,6 +342,12 @@ while done:
                     launch_menu = true
             else:
                 screen.blit(i.image, camera.apply(i))
+        if isinstance(i, Blocks):
+            i.update(sprite_group)
+            screen.blit(i.image, camera.apply(i))
+        if isinstance(i, Dead):
+            i.update(sprite_group, Blocks, Flag, Dynamite, Enemy, Player, Friend)
+            screen.blit(i.image, camera.apply(i))
     for i in boom_group:
         i.update(boom_group, clock.get_fps())
         screen.blit(i.image, camera.apply(i))
