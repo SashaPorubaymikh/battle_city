@@ -4,10 +4,10 @@ from pygame import Surface
 from pygame.transform import scale
 
 import pyganim, sys
-from Boom import Boom
+from blast import Boom
 from dead import Dead
 
-from Bullet import Bullet
+from bullet import Bullet
 
 ANIMATION_DELAY = 0.1
 

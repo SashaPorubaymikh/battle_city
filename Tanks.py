@@ -3,19 +3,19 @@ import sys, random
 import pygame
 
 from dead import Dead
-from Levels import levels
-from Blocks import Blocks
-from Player import Player
-from Bullet import Bullet
-from Controls import Controls
-from Enemy import Enemy
-from Friend import Friend
+from levels import levels
+from blocks import Blocks
+from player import Player
+from bullet import Bullet
+from controls import Controls
+from enemy import Enemy
+from friend import Friend
 from status_bar import Status_bar
 from timer import Timer, New_timer
 from menu import Menu, Pause, End_of_game, Options, Level_choose, Mode_choose, \
     punkts, punkts1, punkts2, punkts3, punkts4, punkts5, punkts6
 from flag import Flag
-from Dynamite import Dynamite
+from dynamite import Dynamite
 
 pygame.init()
 pygame.font.init()
