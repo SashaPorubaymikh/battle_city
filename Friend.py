@@ -2,7 +2,7 @@ from pygame.sprite import Sprite, collide_rect, Rect
 from pygame import Surface
 from pygame.transform import scale
 
-from bullet import Bullet
+from Bullet import Bullet
 from blast import Boom
 from dead import Dead
 

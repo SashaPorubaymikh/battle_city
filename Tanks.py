@@ -3,19 +3,19 @@ import sys, random
 import pygame
 
 from dead import Dead
-from levels import levels
-from blocks import Blocks
-from player import Player
-from bullet import Bullet
-from controls import Controls
-from enemy import Enemy
-from friend import Friend
+from Levels import levels
+from Blocks import Blocks
+from Player import Player
+from Bullet import Bullet
+from Controls import Controls
+from Enemy import Enemy
+from Friend import Friend
 from status_bar import Status_bar
 from timer import Timer, New_timer
 from menu import Menu, Pause, End_of_game, Options, Level_choose, Mode_choose, \
     punkts, punkts1, punkts2, punkts3, punkts4, punkts5, punkts6
 from flag import Flag
-from dynamite import Dynamite
+from Dynamite import Dynamite
 
 pygame.init()
 pygame.font.init()
@@ -307,7 +307,7 @@ while done:
         camera.update(sprite_group[0])
     for i in bullets_group:
         i.update(i.dir, screen, sprite_group, bullets_group, lvl_w, lvl_h)
-    for i in reversed(sprite_group):
+    for i in sprite_group:
         if isinstance(i, Enemy):
             if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h, boom_group, sprite_group) == 0:
                 enemies -= 1
@@ -315,8 +315,6 @@ while done:
         if isinstance(i, Player) and i.isdead == False:
             if i.update(sprite_group, screen, friends, boom_group, player_spavn) == 0:
                 friends -= 1
-            screen.blit(i.image, camera.apply(i))
-            screen.blit(i.recharge, (camera.apply(i)[0], camera.apply(i)[1] - 10))
         elif isinstance(i, Player) and i.isdead == True:
             i.rect.x = i.rect.y = -40
         if isinstance(i, Friend):
@@ -339,7 +337,7 @@ while done:
             elif bomb_return == 'u lose':
                 if bomb_boom_timer.update() == True:
                     u_lose.menu(screen, win)
-                    launch_menu = true
+                    launch_menu = True
             else:
                 screen.blit(i.image, camera.apply(i))
         if isinstance(i, Blocks):
@@ -348,6 +346,10 @@ while done:
         if isinstance(i, Dead):
             i.update(sprite_group, Blocks, Flag, Dynamite, Enemy, Player, Friend)
             screen.blit(i.image, camera.apply(i))
+    if not sprite_group[0].isdead:
+        sprite_group[0].collide_crutch(sprite_group)
+        screen.blit(sprite_group[0].image, camera.apply(sprite_group[0]))
+        screen.blit(sprite_group[0].recharge, (camera.apply(sprite_group[0])[0], camera.apply(sprite_group[0])[1] - 10))
     for i in boom_group:
         i.update(boom_group, clock.get_fps())
         screen.blit(i.image, camera.apply(i))

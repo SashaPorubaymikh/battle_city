@@ -32,7 +32,7 @@ class Dead(Sprite):
         self.rect.x = x
         self.rect.y = y
         self.MOVE_SPEED = 0
-        self.lifes = 8
+        self.lifes = 3
     
     def update(self, sprites, Blocks, Flag, Dynamite, Enemy, Player, Friend):
         self.collide(sprites, Blocks, Flag, Dynamite, Enemy, Player, Friend)

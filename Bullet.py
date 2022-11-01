@@ -27,7 +27,7 @@ class Bullet(Sprite):
     def collide(self, sprites, bullets_group):
         for b in sprites:
             if collide_rect(self, b):
-                if b.type != self.type and not(self.type == 'f' and b.type == 'flag') and\
+                if b.type != self.type and not(self.type == 'f' and b.type == 'flag') and \
                     not(self.type == 'e' and b.type == 'bomb'):
                     b.lifes -= 1
                 bullets_group.remove(self)

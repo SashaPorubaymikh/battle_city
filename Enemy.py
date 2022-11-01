@@ -1,6 +1,6 @@
 from pygame.sprite import Sprite, collide_rect, Rect
 from pygame import Surface
-from bullet import Bullet
+from Bullet import Bullet
 from blast import Boom
 from dead import Dead
 
