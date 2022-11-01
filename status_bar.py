@@ -30,5 +30,5 @@ class Status_bar:
         self.surface.blit(self.enemy_image, (210, 10))
         self.surface.blit(self.font.render('X'+str(enemies), 1, (255, 255, 255)), (255, 15))
 
-        scr.blit(self.surface, (0, 0))
+        scr.blit(self.surface, (0, 10))
         scr.blit(self.font.render('Stage ' + str(lvl), 1, (255, 255, 255)), (1366- self.font.size('stage'+str(lvl))[0] - 20, 10))
