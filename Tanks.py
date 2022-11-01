@@ -1,7 +1,8 @@
-import sys
+import sys, random
 
 import pygame
 
+from dead import Dead
 from Levels import levels
 from Blocks import Blocks
 from Player import Player
@@ -10,10 +11,11 @@ from Controls import Controls
 from Enemy import Enemy
 from Friend import Friend
 from status_bar import Status_bar
-from timer import Timer
-from menu import Menu, Pause, End_of_game, Options, Level_choose, punkts, punkts1, punkts2, \
-    punkts3, punkts4, punkts5
+from timer import Timer, New_timer
+from menu import Menu, Pause, End_of_game, Options, Level_choose, Mode_choose, \
+    punkts, punkts1, punkts2, punkts3, punkts4, punkts5, punkts6
 from flag import Flag
+from Dynamite import Dynamite
 
 pygame.init()
 pygame.font.init()
@@ -31,50 +33,64 @@ full_screen = True
 #Создание перснaжа
 sprite_group = []
 bullets_group = []
+boom_group = []
+dead_group = []
 
-#Персонаж, врги и друзья
+#Персонаж, вргаги и друзья
+                    
 enemies = friends = 0
+                    
 
 #Создание меню
+                    
 pause = Pause(punkts1, "Pause")
 menu = Menu(punkts, "Battle city")
 options = Options(punkts2, 'Options')
 u_win = End_of_game(punkts3, "You win!")
 u_lose = End_of_game(punkts4, 'Game over')
 level_choose = Level_choose(punkts5, 'Choose level')
+mode_choose = Mode_choose(punkts6, 'Choose mode')
 current_diff = 0
+current_mode = 0
 
 #Создание строки состояния
 status_bar = Status_bar(0, 0)
 
 #Создание Таймера
 timer = Timer()
+bomb_boom_timer = New_timer()
 
 #Создание уровня
 max_enemies = 0
 spavned_enemies = 0
 total_enemies = 0
 stage = 0
-bricks_group = []
 enemy_spavner_group = []
 level_num = 0
 lvl_w = lvl_h = 0
-def make_level(level_num, max_e, total_e, diff):
+player_spavn = []
+def make_level(level_num, diff, mode):
     x = y = 0
-    global bricks_group, sprite_group, lvl_w, lvl_h, enemies, \
+    global sprite_group, lvl_w, lvl_h, enemies, \
         friends, max_enemies, total_enemies, spavned_enemies, enemy_spavner_group,\
-            camera
+            camera, bullets_group, boom_group, player_spavn
 
     enemy_spavner_group = []
     bullets_group = []
+    boom_group = []
     timer.timer = 0
-    max_enemies = max_e
-    total_enemies = total_e
+    max_enemies = 6
+    if mode == 1:
+        total_enemies = -1
+    if mode == 0:
+        total_enemies = 20
+    elif mode == 2:
+        total_enemies = -1
     if diff == 1:
-        max_e += 2
+        max_enemies += 2
         total_enemies += 5
     if diff == 2:
-        max_e += 4
+        max_enemies += 4
         total_enemies += 10
     spavned_enemies = 0
     bricks_group = []
@@ -86,11 +102,9 @@ def make_level(level_num, max_e, total_e, diff):
         for col in row:
             if col == '0':
                 b1 = Blocks(x, y, 'images/blocks/brick.png', 1)
-                bricks_group.append(b1)
                 sprite_group.append(b1)
             if col == '1':
                 b1 = Blocks(x, y, 'images/blocks/experimentalbrick.png', 1000000)
-                bricks_group.append(b1)
                 sprite_group.append(b1)
             if col == 'e':
                 enemy_spavner_group.append([x, y])
@@ -100,8 +114,11 @@ def make_level(level_num, max_e, total_e, diff):
             if col == 'p':
                 sprite_group = [Player(x, y)] + sprite_group
                 friends += 1
-            if col == 'b':
+                player_spavn = [x, y]
+            if col == 'b' and mode == 0:
                 sprite_group.append(Flag(x, y))
+            if col == 'd' and mode == 1:
+                sprite_group.append(Dynamite(x, y))
             x += 40
         y += 40
         x = 0
@@ -153,7 +170,7 @@ done = True
 launch_menu = False
 
 clock = pygame.time.Clock()
-make_level(stage, 6, 20, current_diff)
+make_level(stage, current_diff, current_mode)
 menureturn = menu.menu(screen, win)
 if menureturn == 'exit':
     sys.exit()
@@ -162,11 +179,16 @@ elif menureturn == 'options':
     current_diff = menureturn
     launch_menu = True
 elif menureturn == 'new game':
-    menureturn = level_choose.menu(screen, win)
+    menureturn = mode_choose.menu(screen, win)
     if menureturn != 'launch menu':
-        stage = menureturn
-        make_level(stage, 6, 20, current_diff)
-        camera = Camera(camera_func, lvl_w, lvl_h)
+        current_mode = menureturn
+        menureturn = level_choose.menu(screen, win)
+        if menureturn != 'launch menu':
+            stage = menureturn
+            make_level(stage, current_diff, current_mode)
+            camera = Camera(camera_func, lvl_w, lvl_h)
+        else:
+            launch_menu = True
     else:
         launch_menu = True
 
@@ -216,11 +238,16 @@ while done:
             if menureturn == 'exit':
                 sys.exit()
             elif menureturn == 'new game':
-                menureturn = level_choose.menu(screen, win)
+                menureturn = mode_choose.menu(screen, win)
                 if menureturn != 'launch menu':
-                    stage = menureturn
-                    make_level(stage, 6, 20, current_diff)
-                    camera = Camera(camera_func, lvl_w, lvl_h)
+                    current_mode = menureturn
+                    menureturn = level_choose.menu(screen, win)
+                    if menureturn != 'launch menu':
+                        stage = menureturn
+                        make_level(stage, current_diff, current_mode)
+                        camera = Camera(camera_func, lvl_w, lvl_h)
+                    else:
+                        launch_menu = True
                 else:
                     launch_menu = True
             elif menureturn == 'options':
@@ -229,7 +256,7 @@ while done:
                 launch_menu = True
         elif menureturn == 'restart':
             stage = 0
-            make_level(stage, 6, 20, current_diff)
+            make_level(stage, current_diff, current_mode)
             
         pygame.key.set_repeat(10, 10)
     if keys[pygame.K_LEFT] or keys[pygame.K_a]:
@@ -249,11 +276,16 @@ while done:
         if menureturn == 'exit':
             sys.exit()
         elif menureturn == 'new game':
-            menureturn = level_choose.menu(screen, win)
+            menureturn = mode_choose.menu(screen, win)
             if menureturn != 'launch menu':
-                stage = menureturn
-                make_level(stage, 6, 20, current_diff)
-                camera = Camera(camera_func, lvl_w, lvl_h)
+                current_mode = menureturn
+                menureturn = level_choose.menu(screen, win)
+                if menureturn != 'launch menu':
+                    stage = menureturn
+                    make_level(stage, current_diff, current_mode)
+                    camera = Camera(camera_func, lvl_w, lvl_h)
+                else:
+                    launch_menu = True
             else:
                 launch_menu = True
         elif menureturn == 'options':
@@ -264,35 +296,29 @@ while done:
     screen.fill((5, 5, 5))
 
     #отрисовка объектов
-    for i in bricks_group:
-        i.update(bricks_group, sprite_group)
-    for i in bricks_group:
-        screen.blit(i.image, camera.apply(i))
     for i in bullets_group:
         if i.dir == 'up' or i.dir == 'down':
             screen.blit(i.image, camera.apply(i))
         else:
             screen.blit(pygame.transform.rotate(i.image, 90), camera.apply(i))
-
+    
     #Обновление персонажей
     if len(sprite_group) > 0:
         camera.update(sprite_group[0])
     for i in bullets_group:
         i.update(i.dir, screen, sprite_group, bullets_group, lvl_w, lvl_h)
-    for i in reversed(sprite_group):
+    for i in sprite_group:
         if isinstance(i, Enemy):
-            if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h) == 0:
+            if i.update(sprite_group, friends, enemies, bullets_group, lvl_w, lvl_h, boom_group, sprite_group) == 0:
                 enemies -= 1
             screen.blit(i.image, camera.apply(i))
         if isinstance(i, Player) and i.isdead == False:
-            if i.update(sprite_group, screen, friends) == 0:
+            if i.update(sprite_group, screen, friends, boom_group, player_spavn) == 0:
                 friends -= 1
-            screen.blit(i.image, camera.apply(i))
-            screen.blit(i.recharge, (camera.apply(i)[0], camera.apply(i)[1] - 10))
         elif isinstance(i, Player) and i.isdead == True:
             i.rect.x = i.rect.y = -40
         if isinstance(i, Friend):
-            if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h) == 0:
+            if i.update(sprite_group, enemies, friends, bullets_group, lvl_w, lvl_h, boom_group, sprite_group) == 0:
                 friends -= 1
             screen.blit(i.image, camera.apply(i))
         if isinstance(i, Flag):
@@ -301,13 +327,47 @@ while done:
                 launch_menu = True
             else:
                 screen.blit(i.image, (camera.apply(i)[0], camera.apply(i)[1]))
+        if isinstance(i, Dynamite):
+            bomb_return = i.update(sprite_group, boom_group)
+            if bomb_return == 'u win':
+                u_win.menu(screen, win)
+                stage += 1
+                if stage < len(levels):
+                    make_level(stage, current_diff, current_mode)
+            elif bomb_return == 'u lose':
+                if bomb_boom_timer.update() == True:
+                    u_lose.menu(screen, win)
+                    launch_menu = True
+            else:
+                screen.blit(i.image, camera.apply(i))
+        if isinstance(i, Blocks):
+            i.update(sprite_group)
+            screen.blit(i.image, camera.apply(i))
+        if isinstance(i, Dead):
+            i.update(sprite_group, Blocks, Flag, Dynamite, Enemy, Player, Friend)
+            screen.blit(i.image, camera.apply(i))
+    if not sprite_group[0].isdead:
+        sprite_group[0].collide_crutch(sprite_group)
+        screen.blit(sprite_group[0].image, camera.apply(sprite_group[0]))
+        screen.blit(sprite_group[0].recharge, (camera.apply(sprite_group[0])[0], camera.apply(sprite_group[0])[1] - 10))
+    for i in boom_group:
+        i.update(boom_group, clock.get_fps())
+        screen.blit(i.image, camera.apply(i))
+
+            
+                
     if timer.update() == True:
+        random.shuffle(enemy_spavner_group)
         for i in enemy_spavner_group:
-            if enemies < max_enemies and spavned_enemies < total_enemies:
+            if enemies < max_enemies and (spavned_enemies < total_enemies or current_mode == 2 or current_mode == 1):
                 sprite_group.append(Enemy(i[0], i[1], current_diff))
                 enemies += 1
                 spavned_enemies += 1
-    status_bar.show(sprite_group[0].lifes, friends, total_enemies - spavned_enemies, stage + 1, screen, scr_w)
+    if current_mode == 0: 
+        status_bar.show(sprite_group[0].lifes, friends, total_enemies - spavned_enemies, stage + 1, screen, scr_w)
+    elif current_mode == 2 or current_mode == 1:
+        status_bar.show(sprite_group[0].lifes, friends, spavned_enemies, stage + 1, screen, scr_w)
+
 
     if friends == 0:
         u_lose.menu(screen, win)
@@ -316,7 +376,7 @@ while done:
         u_win.menu(screen, win)
         stage += 1
         if stage < len(levels):
-            make_level(stage, 6, 20, current_diff)
+            make_level(stage, current_diff, current_mode)
     
 
     if show_controls == True:

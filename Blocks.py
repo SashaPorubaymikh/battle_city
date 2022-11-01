@@ -11,9 +11,6 @@ class Blocks(Sprite):
         self.rect.y = y
         self.lifes = lifes
         self.type = 'block'
-    def update(self, group, group2):
+    def update(self, group):
         if self.lifes == 0:
-            group.remove(self)
-            group2.remove(self)
-
-    
+            group.remove(self)    
