@@ -34,7 +34,7 @@ class Player(Sprite):
         Sprite.__init__(self)
         self._image = Surface((40, 40))
         self._image.set_colorkey((255, 255, 255))
-        self.image = None
+        self.image = Surface((0, 0))
         self.rect = Rect(0, 0, 34, 34)
         self.xvel = self.yvel = 0
         self.rect.x = x
